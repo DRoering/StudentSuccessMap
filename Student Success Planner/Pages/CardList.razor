@@ -1,0 +1,31 @@
+﻿@using Student_Success_Planner.Data
+@typeparam TItem
+
+<CardGroup>
+    @foreach (CardItem item in items)
+    {
+        @*<div max-width="100px" height="50px" display="inline-block" border="3px solid #73AD21">
+
+            </div>*@
+        <Card @onclick="@(() => handleOnClick(item))">
+            <CardBody>
+                <CardTitle Size="5">@item.getTitle()</CardTitle>
+                <CardText>@item.getDescription()</CardText>
+            </CardBody>
+        </Card>
+    }
+</CardGroup>
+
+@code {
+    [Parameter]
+    public CardItem[] items { get; set; }
+
+    [Parameter]
+    public EventCallback<TItem> OnClick { get; set; }
+
+    private void handleOnClick(CardItem cardItem)
+    {
+        TItem selectedItem = (TItem)cardItem;
+        OnClick.InvokeAsync(selectedItem);
+    }
+}

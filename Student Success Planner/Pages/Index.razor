@@ -1,5 +1,17 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+@inject NavigationManager navigationManager
 
-Welcome to your new app.
+@code {
+    protected override void OnInitialized()
+    {
+        try
+        {
+            navigationManager.NavigateTo("/colleges");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+}

@@ -1,0 +1,48 @@
+﻿@page "/colleges"
+
+@using Student_Success_Planner.Data
+@inject CollegesService collegesService
+@inject BreadcrumbService breadcrumbService
+@inject NavigationManager navigationManager
+
+<Breadcrumb>
+    <BreadcrumbItem IsActive="true">
+        <BreadcrumbLink @onclick="breadcrumbService.handleCollegeDeselection" To="/colleges">Colleges and Schools</BreadcrumbLink>
+    </BreadcrumbItem>
+</Breadcrumb>
+
+<h3>Colleges and Schools</h3>
+
+@if (colleges == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <CardList items="@colleges" TItem="College" OnClick="handleCollegeSelected" />
+}
+
+@code {
+    private College[] colleges;
+
+    protected override async Task OnInitializedAsync()
+    {
+        colleges = await collegesService.getCollegesAsync();
+    }
+
+    private void handleCollegeSelected(College college)
+    {
+        breadcrumbService.handleCollegeSelection(college);        
+
+        //Need try catch block to avoid exception sometimes thrown during this method call
+        try
+        {
+            //Navigate to department selection
+            navigationManager.NavigateTo(navigationManager.BaseUri + "/colleges/departments");
+        }
+        catch (Exception e)
+        {
+            Console.Write(e);
+        }
+    }
+}
