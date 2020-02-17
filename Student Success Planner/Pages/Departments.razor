@@ -1,0 +1,90 @@
+﻿@page "/colleges/departments"
+
+@using Student_Success_Planner.Data
+@inject DepartmentsService departmentsService
+@inject BreadcrumbService breadcrumbService
+@inject NavigationManager navigationManager
+
+@*College has not been selected*@
+@if (!canLoadDepartments)
+{
+    //Need try catch block to avoid exception sometimes thrown during this method call
+    try
+    {
+        //Return to colleges page
+        navigationManager.NavigateTo(navigationManager.BaseUri + "/colleges");
+    }
+    catch (Exception e)
+    {
+        Console.Write(e);
+    }
+}
+else //Display department selection for the given college
+{
+    <Breadcrumb>
+        <BreadcrumbItem>
+            <BreadcrumbLink @onclick="breadcrumbService.handleCollegeDeselection" To="/colleges">Colleges and Schools</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbItem IsActive="true">
+            <BreadcrumbLink @onclick="breadcrumbService.handleDepartmentDeselection" To="/colleges/departments">@breadcrumbService.selectedCollege.getAbbreviation()</BreadcrumbLink>
+        </BreadcrumbItem>
+    </Breadcrumb>
+
+    <h3>Departments</h3>
+
+    @if (departments == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <CardList items="@departments" TItem="Department" OnClick="handleDepartmentSelected" />
+    }
+
+    @code {
+        private Department[] departments;
+
+        /// <summary>
+        /// Determines if the departments can be loaded.
+        /// </summary>
+        private bool canLoadDepartments
+        {
+            get
+            {
+                return breadcrumbService.selectedCollege != null;
+            }
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            //Only attempt to load departments if the required information to do so is available
+            if (canLoadDepartments)
+            {
+                try
+                {
+                    departments = await departmentsService.getDepartmentsAsync(breadcrumbService.selectedCollege);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
+
+        private void handleDepartmentSelected(Department department)
+        {
+            breadcrumbService.handleDepartmentSelection(department);
+
+            //Need try catch block to avoid exception sometimes thrown during this method call
+            try
+            {
+                //Navigate to program selection
+                navigationManager.NavigateTo(navigationManager.BaseUri + "/colleges/departments/programs");
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+            }
+        }
+    }
+}

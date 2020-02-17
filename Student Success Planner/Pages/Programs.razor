@@ -1,0 +1,93 @@
+﻿@page "/colleges/departments/programs"
+
+@using Student_Success_Planner.Data
+@inject ProgramsService programsService
+@inject BreadcrumbService breadcrumbService
+@inject NavigationManager navigationManager
+
+@*College and or Department has not been selected*@
+@if (!canLoadPrograms)
+{
+    //Need try catch block to avoid exception sometimes thrown during this method call
+    try
+    {
+        //Return to departments page
+        navigationManager.NavigateTo(navigationManager.BaseUri + "/colleges/departments");
+    }
+    catch (Exception e)
+    {
+        Console.Write(e);
+    }
+}
+else //Display department selection for the given college
+{
+    <Breadcrumb>
+        <BreadcrumbItem>
+            <BreadcrumbLink @onclick="breadcrumbService.handleCollegeDeselection" To="/colleges">Colleges and Schools</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+            <BreadcrumbLink @onclick="breadcrumbService.handleDepartmentDeselection" To="/colleges/departments">@breadcrumbService.selectedCollege.getAbbreviation()</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbItem IsActive="true">
+            <BreadcrumbLink @onclick="breadcrumbService.handleProgramDeselection" To="/colleges/departments/programs">@breadcrumbService.selectedDepartment.getName()</BreadcrumbLink>
+        </BreadcrumbItem>
+    </Breadcrumb>
+
+    <h3>Programs</h3>
+
+    @if (programs == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <CardList items="@programs" TItem="Student_Success_Planner.Data.Program" OnClick="handleProgramSelected" />
+    }
+
+    @code {
+        private Student_Success_Planner.Data.Program [] programs;
+
+        /// <summary>
+        /// Determines if the programs can be loaded.
+        /// </summary>
+        private bool canLoadPrograms
+        {
+            get
+            {
+                return breadcrumbService.selectedCollege != null && breadcrumbService.selectedDepartment != null;
+            }
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            //Only attempt to load programs if the required information to do so is available
+            if (canLoadPrograms)
+            {
+                try
+                {
+                    programs = await programsService.getProgramsAsync(breadcrumbService.selectedDepartment);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
+
+        private void handleProgramSelected(Student_Success_Planner.Data.Program program)
+        {
+            breadcrumbService.handleProgramSelection(program);
+
+            //Need try catch block to avoid exception sometimes thrown during this method call
+            try
+            {
+                //Navigate to program selection
+                navigationManager.NavigateTo(navigationManager.BaseUri + "/colleges/departments/programs/success-map");
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+            }
+        }
+    }
+}

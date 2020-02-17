@@ -1,0 +1,20 @@
+﻿@page "/colleges/departments/programs/success-map"
+
+@using Student_Success_Planner.Data
+@inject BreadcrumbService breadcrumbService
+@inject NavigationManager navigationManager
+
+<Breadcrumb>
+    <BreadcrumbItem>
+        <BreadcrumbLink @onclick="breadcrumbService.handleCollegeDeselection" To="/colleges">Colleges and Schools</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbItem>
+        <BreadcrumbLink @onclick="breadcrumbService.handleDepartmentDeselection" To="/colleges/departments">@breadcrumbService.selectedCollege.getAbbreviation()</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbItem>
+        <BreadcrumbLink @onclick="breadcrumbService.handleProgramDeselection" To="/colleges/departments/programs">@breadcrumbService.selectedDepartment.getName()</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbItem IsActive="true">
+        <BreadcrumbLink To="/colleges/departments/programs/success-map">@breadcrumbService.selectedProgram.getName()</BreadcrumbLink>
+    </BreadcrumbItem>
+</Breadcrumb>
