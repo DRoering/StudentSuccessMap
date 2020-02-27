@@ -37,14 +37,9 @@ namespace Student_Success_Planner.Data
 
         #region CardItem
 
-        public string getTitle()
+        public CardItemData getCardItemData()
         {
-            return abbreviation;
-        }
-
-        public string getDescription()
-        {
-            return name;
+            return new CardItemData(abbreviation, name);
         }
 
         #endregion CardItem
