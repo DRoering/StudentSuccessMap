@@ -1,20 +1,50 @@
 ﻿@using Student_Success_Planner.Data
 @typeparam TItem
 
-<CardGroup>
-    @foreach (CardItem item in items)
-    {
-        @*<div max-width="100px" height="50px" display="inline-block" border="3px solid #73AD21">
+@foreach (CardItem item in items)
+{
+    CardItemData data = item.getCardItemData();
+    <MatCard Style="display:inline-block; padding:10px; margin:10px; width:250px; height:100px;" @onclick="@(() => handleOnClick(item))">
+        <MatCardContent>
+            @if (!String.IsNullOrEmpty(data.title) && !String.IsNullOrEmpty(data.description))
+            {
+                <MatHeadline6>@data.title</MatHeadline6>
+                <MatBody2>@data.description</MatBody2>
+            }
+            else //Some or all of the card data is invalid
+            {
+                string cardText = null;
 
-            </div>*@
-        <Card @onclick="@(() => handleOnClick(item))">
-            <CardBody>
-                <CardTitle Size="5">@item.getTitle()</CardTitle>
-                <CardText>@item.getDescription()</CardText>
-            </CardBody>
-        </Card>
-    }
-</CardGroup>
+                if (!String.IsNullOrEmpty(data.title))
+                    cardText = data.title;
+                else if (!String.IsNullOrEmpty(data.title))
+                    cardText = data.description;
+
+                //One of the card data items are valid, display differntly than above
+                if (!String.IsNullOrEmpty(cardText))
+                {
+                    <MatSubtitle1>@cardText</MatSubtitle1>
+                }
+            }
+
+        </MatCardContent>
+    </MatCard>
+}
+
+@*<CardGroup>
+        @foreach (CardItem item in items)
+        {
+            <div max-width="100px" height="50px" display="inline-block" border="3px solid #73AD21">
+
+                </div>
+            <Card @onclick="@(() => handleOnClick(item))">
+                <CardBody>
+                    <CardTitle Size="5">@item.getTitle()</CardTitle>
+                    <CardText>@item.getDescription()</CardText>
+                </CardBody>
+            </Card>
+        }
+    </CardGroup>*@
 
 @code {
     [Parameter]

@@ -26,14 +26,9 @@ namespace Student_Success_Planner.Data
 
         #region CardItem
 
-        public string getTitle()
+        public CardItemData getCardItemData()
         {
-            return name;
-        }
-
-        public string getDescription()
-        {
-            return "";
+            return new CardItemData(name, null);
         }
 
         #endregion CardItem
