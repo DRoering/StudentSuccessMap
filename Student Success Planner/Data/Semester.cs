@@ -9,10 +9,7 @@ namespace Student_Success_Planner.Data
     {
         public string Name { get; set; }
 
-        /// <summary>
-        /// Success objectives in this semester.
-        /// </summary>
-        public List<SuccessObjective> SuccessObjectives { get; set; }
+        public SchoolYear SchoolYear { get; set; }
 
         public Semester() { }
 
@@ -21,10 +18,10 @@ namespace Student_Success_Planner.Data
             Name = name;
         }
 
-        public Semester(string name, ICollection<SuccessObjective> successObjectives)
+        public Semester(string name, SchoolYear schoolYear)
         {
             Name = name;
-            SuccessObjectives = new List<SuccessObjective>(successObjectives);
+            SchoolYear = schoolYear;
         }
     }
 }

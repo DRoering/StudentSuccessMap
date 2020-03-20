@@ -18,6 +18,20 @@ namespace Student_Success_Planner.Data
 
         public Semester Summer { get; set; }
 
+        /// <summary>
+        /// Array containing all semesters in the school year.
+        /// </summary>
+        public Semester[] Semesters
+        {
+            get
+            {
+                return new Semester[3]
+                {
+                    Fall, Spring, Summer
+                };
+            }
+        }
+
         public SchoolYear() { }
 
         public SchoolYear(string studentClass)

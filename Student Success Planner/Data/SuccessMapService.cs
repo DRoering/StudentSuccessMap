@@ -46,35 +46,147 @@ namespace Student_Success_Planner.Data
         {
             SuccessMap seMap = new SuccessMap();
 
-            seMap.SuccessCategories = new SuccessCategory[5]
+            seMap.addSuccessCategories(new SuccessCategory[5]
             {
                 new SuccessCategory("Soft Skills"),
                 new SuccessCategory("Life Long Learning Ability"),
                 new SuccessCategory("Special Technical Skills, Techniques and Tools"),
                 new SuccessCategory("Fundamental Knowledge"),
                 new SuccessCategory("Citizenship")
-            };
+            });
 
-            foreach (SuccessCategory category in  seMap.SuccessCategories)
+            seMap.addSchoolYears(new SchoolYear[4]
             {
-                category.SchoolYears = new SchoolYear[4]
-                {
-                    new SchoolYear("Freshman", new Semester("Fall"), new Semester("Spring"), new Semester("Summer")),
-                    new SchoolYear("Sophomore", new Semester("Fall"), new Semester("Spring"), new Semester("Summer")),
-                    new SchoolYear("Junior", new Semester("Fall"), new Semester("Spring"), new Semester("Summer")),
-                    new SchoolYear("Senior", new Semester("Fall"), new Semester("Spring"), new Semester("Summer"))
-                };
+                new SchoolYear("Freshman"),
+                new SchoolYear("Sophomore"),
+                new SchoolYear("Junior"),
+                new SchoolYear("Senior")
+            });
+
+            foreach (SchoolYear schoolYear in seMap.SchoolYears)
+            {
+                schoolYear.Fall = new Semester("Fall", schoolYear);
+                schoolYear.Spring = new Semester("Spring", schoolYear);
+                schoolYear.Summer = new Semester("Summer", schoolYear);
             }
 
-            //Soft Skills - Freshman - Fall
-            seMap.SuccessCategories[0].SchoolYears[0].Fall.SuccessObjectives = new List<SuccessObjective>()
+            #region Soft Skills
+
+            #region Freshman
+
+            seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[0].Fall, new List<SuccessObjective>()
             {
                 new Course("Introduction to Computer Networking", "Test description",
                 "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+221",
+                1,
                 "SE 221",
                 CourseType.ProgramCore),
-                new SuccessActivity("Hackathon", "Test description", "")
-            };
+                new SuccessActivity("Hackathons", "Test description", "", 1)
+            });
+
+            seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[0].Spring, new List<SuccessObjective>()
+            {
+                new Course("Introduction to Computer Security", "Test description",
+                "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+231",
+                1,
+                "SE 231",
+                CourseType.ProgramCore),
+                new SuccessActivity("Hackathons", "Test description", "", 1),
+                new SuccessActivity("Husky Invent", "Test description", "", 1),
+            });
+
+            #endregion Freshman
+
+            #region Sophomore
+
+            seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[1].Fall, new List<SuccessObjective>()
+            {
+                new Course("Applied Undergraduate Research", "Test description",
+                "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+342",
+                1,
+                "SE 340",
+                CourseType.ProgramCore),
+                new Course("Communication in the Workplace", "Test description",
+                "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=CMST+341",
+                1,
+                "CMST 341",
+                CourseType.ProgramCore),
+                new SuccessActivity("Std. Res. Grant", "Student Research Grant", "", 1)
+            });
+
+            seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[1].Spring, new List<SuccessObjective>()
+            {
+                new Course("Applied Undergraduate Research", "Test description",
+                "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+342",
+                1,
+                "SE 341",
+                CourseType.ProgramCore),
+                new Course("Software Engineering and Human Computer Interaction", "Test description",
+                "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+350",
+                1,
+                "SE 350",
+                CourseType.ProgramCore),
+                new SuccessActivity("Std. Res. Grant", "Student Research Grant", "", 1),
+                new SuccessActivity("SCSU Colloquium", "Test description", "", 1)
+            });
+
+            #endregion Sophomore
+
+            #region Junior
+
+            seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[2].Fall, new List<SuccessObjective>()
+            {
+                new SuccessActivity("Hackathons", "Test description", "", 1),
+                new SuccessActivity("Corporate Visits", "Test description", "", 1)
+            });
+
+            seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[2].Spring, new List<SuccessObjective>()
+            {
+                new SuccessActivity("Hackathons", "Test description", "", 1),
+                new SuccessActivity("Mock Interview", "Test description", "", 1),
+                new SuccessActivity("Corporate Visits", "Test description", "", 1)
+            });
+
+            seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[2].Summer, new List<SuccessObjective>()
+            {
+                new Course("Internship", "Test description",
+                "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+444",
+                1,
+                "SE 444",
+                CourseType.ProgramCore),
+                new SuccessActivity("Research Assist.", "Test description", "", 1)
+            });
+
+            #endregion Junior
+
+            #region Senior
+
+            seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[3].Fall, new List<SuccessObjective>()
+            {
+                new Course("Software Project 1", "Test description",
+                "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+490",
+                1,
+                "SE 490",
+                CourseType.ProgramCore),
+                new SuccessActivity("Hackathons", "Test description", "", 1),
+                new SuccessActivity("Corporate Visits", "Test description", "", 1)
+            });
+
+            seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[3].Spring, new List<SuccessObjective>()
+            {
+                new Course("Software Project 2", "Test description",
+                "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+491",
+                1,
+                "SE 491",
+                CourseType.ProgramCore),
+                new SuccessActivity("Hackathons", "Test description", "", 1),
+                new SuccessActivity("Mock Interview", "Test description", "", 1),
+                new SuccessActivity("Corporate Visits", "Test description", "", 1)
+            });
+
+            #endregion Senior
+
+            #endregion Soft Skills
 
             return seMap;
         }
