@@ -28,7 +28,7 @@ else
     {
         <style>
             table, th, td {
-                border: 1px solid black;
+                border: 1px solid white;
             }
 
             .labelCell {
@@ -41,15 +41,19 @@ else
                 border-collapse: separate;
                 border-spacing: 0px 2px;
             }
+
+            @yearColumnsCSS
+
+            @categoryLabelCSS
         </style>
 
         <table>
             <!--School Year Column Headers-->
             <tr>
-                <th style="width: 15%"></th> <!--Spacer-->
+                <th style="width: @(categoryColumnWidth + "%")"></th> <!--Spacer, blank cell above Success Categories-->
                 @for (int i = 0; i < successMap.SchoolYears.Length; i++)
                 {
-                    <th colspan="3" style="width: 21.25%" class="labelCell">
+                    <th colspan="3" class="labelCell @("schoolYear" + i)" style="width: @(yearColumnWidth + "%")">
                         Year @(i + 1) <br />
                         @successMap.SchoolYears[i].StudentClass
                     </th>
@@ -61,33 +65,36 @@ else
                 <th></th> <!--Spacer-->
                 @for (int i = 0; i < successMap.SchoolYears.Length; i++)
                 {
-                    <th class="labelCell">
+                    <th class="labelCell @("schoolYear" + i)">
                         @successMap.SchoolYears[i].Fall.Name
                     </th>
-                    <th class="labelCell">
+                    <th class="labelCell @("schoolYear" + i)">
                         @successMap.SchoolYears[i].Spring.Name
                     </th>
-                    <th class="labelCell">
+                    <th class="labelCell @("schoolYear" + i)">
                         @successMap.SchoolYears[i].Summer.Name
                     </th>
                 }
             </tr>
 
             <!--Success Category rows-->
-            @foreach (SuccessCategory successCategory in successMap.SuccessCategories)
+            @for (int i = 0; i < successMap.SuccessCategories.Length; i++)
             {
+                SuccessCategory successCategory = successMap.SuccessCategories[i];
                 <tr>
                     <!--Success Category Label-->
-                    <th class="labelCell">
+                    <th class="labelCell @("successCategoryLabel" + i)">
                         @successCategory.Name
                     </th>
 
                     <!--Success objectives in successCategory-->
-                    @foreach (SchoolYear schoolYear in successMap.SchoolYears)
+                    @for (int j = 0; j < successMap.SchoolYears.Length; j++)
                     {
-                        @foreach (Semester semester in schoolYear.Semesters)
+                        SchoolYear schoolYear = successMap.SchoolYears[j];
+                        @for (int k = 0; k < schoolYear.Semesters.Length; k++)
                         {
-                            <td>
+                            Semester semester = schoolYear.Semesters[k];
+                            <td class="@("schoolYear" + j)">
                                 @if (successMap.tryGetSuccessObjectives(successCategory, semester,
                                  out Student_Success_Planner.Data.SuccessObjective[] successObjectives))
                                 {
@@ -120,6 +127,97 @@ else
                 breadcrumbService.selectedProgram != null;
             }
         }
+
+        #region Dynamic Styling
+
+        /// <summary>
+        /// Width of the success category column width as a percentage.
+        /// </summary>
+        private const float categoryColumnWidth = 15f;
+
+        /// <summary>
+        /// Returns the width of the year column based on the number of years contained in the success map.
+        /// </summary>
+        private float yearColumnWidth
+        {
+            get
+            {
+                //Determine how much space is left after the categoryColumnWidth is accounted for
+                float width = (100f - categoryColumnWidth) / successMap.SchoolYears.Length;
+
+                //Make sure size is above minimum size
+                if (width < minYearColumnWidth)
+                    return minYearColumnWidth;
+                return width;
+            }
+        }
+        private const float minYearColumnWidth = 17f;
+
+        /// <summary>
+        /// Returns a css class for each school year.
+        /// </summary>
+        private string yearColumnsCSS
+        {
+            get
+            {
+                string css = "";
+                float baseOpacity = 1f / successMap.SchoolYears.Length;
+                for (int i = 0; i < successMap.SchoolYears.Length; i++)
+                {
+                    //Evenly increase the opacity
+                    float opacity = baseOpacity * (i + 1);
+                    css += ".schoolYear" + i + " { " +
+                        "background-color: rgba(" +
+                            baseYearColumnColor.R + "," +
+                            baseYearColumnColor.G + "," +
+                            baseYearColumnColor.B + "," +
+                            opacity +
+                        ");" +
+                    "}";
+                }
+
+                return css;
+            }
+        }
+
+        /// <summary>
+        /// Base color the year column colors are derived from.
+        /// </summary>
+        private System.Drawing.Color baseYearColumnColor { get; } = System.Drawing.Color.FromArgb(1, 144, 144, 144);
+
+        /// <summary>
+        /// Returns a css class for each success category label.
+        /// </summary>
+        private string categoryLabelCSS
+        {
+            get
+            {
+                string css = "";
+                float baseOpacity = 1f / successMap.SuccessCategories.Length;
+                for (int i = 0; i < successMap.SuccessCategories.Length; i++)
+                {
+                    //Evenly decrease the opacity
+                    float opacity = baseOpacity * (successMap.SuccessCategories.Length - i);
+                    css += ".successCategoryLabel" + i + " { " +
+                        "background-color: rgba(" +
+                            baseSuccessCategoryColor.R + "," +
+                            baseSuccessCategoryColor.G + "," +
+                            baseSuccessCategoryColor.B + "," +
+                            opacity +
+                        ");" +
+                    "}";
+                }
+
+                return css;
+            }
+        }
+
+        /// <summary>
+        /// Base color the success category colors are derived from.
+        /// </summary>
+        private System.Drawing.Color baseSuccessCategoryColor { get; } = System.Drawing.Color.FromArgb(1, 194, 4, 48);
+
+        #endregion Dynamic Styling
 
         protected override async Task OnInitializedAsync()
         {
