@@ -64,6 +64,7 @@ namespace Student_Success_Planner
             services.AddScoped<CollegesService>();
             services.AddScoped<DepartmentsService>();
             services.AddScoped<ProgramsService>();
+            services.AddScoped<SuccessMapService>();
             services.AddScoped<BreadcrumbService>();
 
             //Blazorise Custom Styling
