@@ -27,12 +27,19 @@ namespace Student_Success_Planner.Data
         /// </summary>
         public int Weight { get; set; }
 
-        public SuccessObjective(string name, string description, string externalLink, int weight)
+        /// <summary>
+        /// Classification of success objective.
+        /// </summary>
+        public SuccessObjectiveClassifier Classifier;
+
+        public SuccessObjective(string name, string description, string externalLink, int weight,
+            SuccessObjectiveClassifier classifier)
         {
             Name = name;
             Description = description;
             ExternalLink = externalLink;
             Weight = weight;
+            Classifier = classifier;
         }
     }
 }
