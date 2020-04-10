@@ -33,7 +33,6 @@ namespace Student_Success_Planner.Data
     {
         GoalArea,
         ProgramCore,
-        Elective,
-        Other
+        Elective
     }
 }
