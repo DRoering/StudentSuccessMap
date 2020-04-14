@@ -42,21 +42,21 @@ else
 
     //Search bar
     <Blazorise.Components.Autocomplete Data="@relevantSuccessObjectives"
-                                       TextField="@((objective) => objective.Name)"
-                                       ValueField="@((objective) => objective.Name)"
-                                       SelectedValue="@Search"
-                                       SelectedValueChanged="@handleSearchChanged"
-                                       Filter="@Blazorise.Components.AutocompleteFilter.Contains"
-                                       Placeholder="Search..." />
+        TextField="@((objective) => objective.Name)"
+        ValueField="@((objective) => objective.Name)"
+        SelectedValue="@Search"
+        SelectedValueChanged="@handleSearchChanged"
+        Filter="@Blazorise.Components.AutocompleteFilter.Contains"
+        Placeholder="Search..." />
 
     //Search Filters
-    <MatAccordion>
+    <MatAccordion Style="margin-top: 5px; margin-bottom: 10px;">
         <MatExpansionPanel>
             <MatExpansionPanelSummary>
                 <MatExpansionPanelHeader>Filters</MatExpansionPanelHeader>
             </MatExpansionPanelSummary>
             <MatExpansionPanelDetails>
-                <MatSelect Label="Success Objective Type" Outlined="true" Style="display:inline-block"
+                <MatSelect Label="Success Objective Type" Outlined="false" Style="display:inline-block"
                            TValue="string" Value="TypeFilter" ValueChanged="handleTypeFilterChanged">
                     <MatOptionString Value="@SuccessMapSearchFilters.ALL">@SuccessMapSearchFilters.ALL</MatOptionString>
                     <MatOptionString Value="@SuccessMapSearchFilters.GOAL_AREAS">@SuccessMapSearchFilters.GOAL_AREAS</MatOptionString>
@@ -64,7 +64,7 @@ else
                     <MatOptionString Value="@SuccessMapSearchFilters.ELECTIVES">@SuccessMapSearchFilters.ELECTIVES</MatOptionString>
                     <MatOptionString Value="@SuccessMapSearchFilters.SUCCESS_ACTIVITIES">@SuccessMapSearchFilters.SUCCESS_ACTIVITIES</MatOptionString>
                 </MatSelect>
-                <MatSelect Label="Success Objective Classifier" Outlined="true" Style="display:inline-block"
+                <MatSelect Label="Success Objective Classifier" Outlined="false" Style="display:inline-block"
                            TValue="string" Value="ClassifierFilter" ValueChanged="handleClassifierFilterChanged">
                     <MatOptionString Value="@SuccessMapSearchFilters.ALL">@SuccessMapSearchFilters.ALL</MatOptionString>
 
