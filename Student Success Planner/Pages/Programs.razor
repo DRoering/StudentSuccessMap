@@ -12,7 +12,7 @@
     try
     {
         //Return to departments page
-        navigationManager.NavigateTo(navigationManager.BaseUri + "/colleges/departments");
+        navigationManager.NavigateTo(navigationManager.BaseUri + "colleges/departments");
     }
     catch (Exception e)
     {
@@ -82,7 +82,7 @@ else //Display department selection for the given college
             try
             {
                 //Navigate to program selection
-                navigationManager.NavigateTo(navigationManager.BaseUri + "/colleges/departments/programs/success-map");
+                navigationManager.NavigateTo(navigationManager.BaseUri + "colleges/departments/programs/success-map");
             }
             catch (Exception e)
             {

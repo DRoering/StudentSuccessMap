@@ -20,12 +20,12 @@ namespace Student_Success_Planner.Data
         /// <summary>
         /// Current search filter value for success objective type.
         /// </summary>
-        public string TypeFilter { get; private set; } = SuccessMapSearchFilters.NONE;
+        public string TypeFilter { get; private set; } = SuccessMapSearchFilters.ALL;
 
         /// <summary>
         /// Current search filter value for success objective classifier.
         /// </summary>
-        public string ClassifierFilter { get; private set; } = SuccessMapSearchFilters.NONE;
+        public string ClassifierFilter { get; private set; } = SuccessMapSearchFilters.ALL;
 
         /// <summary>
         /// Collection of all success objectives relevant to the current search criteria.
@@ -56,7 +56,7 @@ namespace Student_Success_Planner.Data
             filteredObjectives[SuccessMapSearchFilters.PROGRAM_CORE] = new List<SuccessObjective>();
             filteredObjectives[SuccessMapSearchFilters.ELECTIVES] = new List<SuccessObjective>();
             filteredObjectives[SuccessMapSearchFilters.SUCCESS_ACTIVITIES] = new List<SuccessObjective>();
-            filteredObjectives[SuccessMapSearchFilters.NONE] = new List<SuccessObjective>(successMap.AllSuccessObjectives);
+            filteredObjectives[SuccessMapSearchFilters.ALL] = new List<SuccessObjective>(successMap.AllSuccessObjectives);
 
             //Index success objectives according to filter options for quicker searching later
             foreach (SuccessObjective objective in successMap.AllSuccessObjectives)
@@ -83,6 +83,8 @@ namespace Student_Success_Planner.Data
                 }
             }
 
+            reset();
+
             needsUpdate = true;
         }
 
@@ -97,7 +99,7 @@ namespace Student_Success_Planner.Data
             if (needsUpdate)
             {
                 //No classifier filter, only check for search value
-                if (ClassifierFilter == SuccessMapSearchFilters.NONE)
+                if (ClassifierFilter == SuccessMapSearchFilters.ALL)
                     relevantSuccessObjectives = filteredObjectives[TypeFilter].FindAll(objective =>
                             objective.Name.Contains(Search)
                         );
@@ -117,8 +119,7 @@ namespace Student_Success_Planner.Data
         /// </summary>
         public void onSearchChanged(string search)
         {
-            Search = search == null ? "" : search;
-            
+            Search = search == null ? "" : search;            
             needsUpdate = true;
         }
 
@@ -139,11 +140,23 @@ namespace Student_Success_Planner.Data
             ClassifierFilter = filter;
             needsUpdate = true;
         }
+
+        /// <summary>
+        /// Resets search criteria to default values.
+        /// </summary>
+        private void reset()
+        {
+            Search = "";
+            TypeFilter = SuccessMapSearchFilters.ALL;
+            ClassifierFilter = SuccessMapSearchFilters.ALL;
+
+            needsUpdate = true;
+        }
     }
 
     public static class SuccessMapSearchFilters
     {
-        public const string NONE = "None";
+        public const string ALL = "All";
         public const string GOAL_AREAS = "Goal Areas";
         public const string PROGRAM_CORE = "Program Core";
         public const string ELECTIVES = "Electives";
@@ -154,7 +167,7 @@ namespace Student_Success_Planner.Data
         /// </summary>
         public static string[] TypeFilters { get; } = new string[]
         {
-            NONE,
+            ALL,
             GOAL_AREAS,
             ELECTIVES,
             SUCCESS_ACTIVITIES
