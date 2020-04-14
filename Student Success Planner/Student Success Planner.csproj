@@ -15,4 +15,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\MySql.Data\v4.0_8.0.19.0__c5687fc88969c44d\MySql.Data.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
