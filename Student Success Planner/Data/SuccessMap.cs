@@ -32,6 +32,30 @@ namespace Student_Success_Planner.Data
         private List<SchoolYear> schoolYears;
 
         /// <summary>
+        /// Success objective classifiers used by this success map.
+        /// </summary>
+        public SuccessObjectiveClassifier[] ObjectiveClassifiers
+        {
+            get
+            {
+                return objectiveClassifiers.ToArray();
+            }
+        }
+        private List<SuccessObjectiveClassifier> objectiveClassifiers;
+
+        /// <summary>
+        /// Complete list of all success objectives in the success map.
+        /// </summary>
+        public SuccessObjective[] AllSuccessObjectives
+        {
+            get
+            {
+                return allSuccessObjectives.ToArray();
+            }
+        }
+        private List<SuccessObjective> allSuccessObjectives;
+
+        /// <summary>
         /// Success objectives organized by success category and semester.
         /// </summary>
         private Dictionary<Tuple<SuccessCategory, Semester>, List<SuccessObjective>> successObjectives;
@@ -40,14 +64,19 @@ namespace Student_Success_Planner.Data
         {
             successCategories = new List<SuccessCategory>();
             schoolYears = new List<SchoolYear>();
+            objectiveClassifiers = new List<SuccessObjectiveClassifier>();
             successObjectives = new Dictionary<Tuple<SuccessCategory, Semester>, List<SuccessObjective>>();
+            allSuccessObjectives = new List<SuccessObjective>();
         }
 
-        public SuccessMap(ICollection<SuccessCategory> successCategories, ICollection<SchoolYear> schoolYears)
+        public SuccessMap(ICollection<SuccessCategory> successCategories, ICollection<SchoolYear> schoolYears,
+            ICollection<SuccessObjectiveClassifier> objectiveClassifiers)
         {
             this.successCategories = new List<SuccessCategory>(successCategories);
             this.schoolYears = new List<SchoolYear>(schoolYears);
+            this.objectiveClassifiers = new List<SuccessObjectiveClassifier>(objectiveClassifiers);
             successObjectives = new Dictionary<Tuple<SuccessCategory, Semester>, List<SuccessObjective>>();
+            allSuccessObjectives = new List<SuccessObjective>();
         }
 
         #region Success Categories
@@ -94,6 +123,28 @@ namespace Student_Success_Planner.Data
 
         #endregion School Years
 
+        #region Success Objective Classifiers
+
+        /// <summary>
+        /// Adds a success objective classifier to the success map.
+        /// </summary>
+        public void addSuccessObjectiveClassifier(SuccessObjectiveClassifier classifier)
+        {
+            if (classifier != null)
+                objectiveClassifiers.Add(classifier);
+        }
+
+        /// <summary>
+        /// Adds a collection of success objective classifier to the success map.
+        /// </summary>
+        public void addSuccessObjectiveClassifiers(ICollection<SuccessObjectiveClassifier> classifiers)
+        {
+            if (classifiers != null)
+                objectiveClassifiers.AddRange(classifiers);
+        }
+
+        #endregion Success Objective Classifiers
+
         #region Success Objectives
 
         /// <summary>
@@ -121,8 +172,9 @@ namespace Student_Success_Planner.Data
                 if (!successObjectives.ContainsKey(key))
                     successObjectives.Add(key, new List<SuccessObjective>());
 
-                //Add the successObjective to the list
+                //Store success objective in collections
                 successObjectives[key].Add(successObjective);
+                allSuccessObjectives.Add(successObjective);
             }
         }
 
@@ -159,8 +211,9 @@ namespace Student_Success_Planner.Data
             if (!successObjectives.ContainsKey(key))
                 return false;
 
-            //Remove the successObjective from the list
-            return successObjectives[key].Remove(successObjective); ;
+            //Remove the successObjective from collections
+            allSuccessObjectives.Remove(successObjective);
+            return successObjectives[key].Remove(successObjective);
         }
 
         /// <summary>

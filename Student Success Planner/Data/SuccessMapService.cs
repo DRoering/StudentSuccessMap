@@ -86,6 +86,8 @@ namespace Student_Success_Planner.Data
             classifiers.Add(researchActivities.Classifier, researchActivities);
             classifiers.Add(workExperience.Classifier, workExperience);
 
+            seMap.addSuccessObjectiveClassifiers(classifiers.Values);
+
             #endregion Success Objective Classifers
 
             #region Soft Skills
