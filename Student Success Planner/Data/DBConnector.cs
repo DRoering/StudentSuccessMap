@@ -44,7 +44,7 @@ namespace Student_Success_Planner.Data
             return readerList;
         }
 
-        public void QueryDatabaseAdd(String Query)
+        public void QueryDatabaseModify(String Query)
         {
             List<MySqlDataReader> readerList = new List<MySqlDataReader>();
 
@@ -57,6 +57,7 @@ namespace Student_Success_Planner.Data
 
                 string sql = Query;
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
             {

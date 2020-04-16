@@ -22,7 +22,7 @@ namespace Student_Success_Planner.Data
                         ", Abbr = " + Abr +
                         "WHERE SMID = " + SID;
 
-            Connector.QueryDatabaseAdd(Statement);
+            Connector.QueryDatabaseModify(Statement);
         }
 
         public void InsertSM(String SName, int PID, string Abr)
@@ -30,7 +30,7 @@ namespace Student_Success_Planner.Data
             Statement = "INSERT INTO SuccessMap(SMName, PrgmID, Abbr) " +
                         "VALUES('"+SName+"','"+PID+"','"+Abr+"')";
 
-            Connector.QueryDatabaseAdd(Statement);
+            Connector.QueryDatabaseModify(Statement);
         }
     }
 }
