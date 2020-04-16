@@ -43,5 +43,29 @@ namespace Student_Success_Planner.Data
 
             return readerList;
         }
+
+        public void QueryDatabaseAdd(String Query)
+        {
+            List<MySqlDataReader> readerList = new List<MySqlDataReader>();
+
+            string connStr = "server=localhost;user=root;database=SMDatabase;port=3306;password=1234";
+            MySqlConnection conn = new MySqlConnection(connStr);
+            try
+            {
+                Console.WriteLine("Connecting to MySQL...");
+                conn.Open();
+
+                string sql = Query;
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            conn.Close();
+            Console.WriteLine("Done.");
+
+        }
     }
 }

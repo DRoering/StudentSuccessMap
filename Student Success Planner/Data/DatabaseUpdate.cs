@@ -14,7 +14,7 @@ namespace Student_Success_Planner.Data
 
         private string Statement = "";
 
-        public IEnumerable<System.Data.IDataRecord> UpdateSM(int SID, String SName, int PID, string Abr)
+        public void UpdateSM(int SID, String SName, int PID, string Abr)
         {
             Statement = "UPDATE SuccessMap SET " +
                         "SMName = " + SName +
@@ -22,15 +22,15 @@ namespace Student_Success_Planner.Data
                         ", Abbr = " + Abr +
                         "WHERE SMID = " + SID;
 
-            return Connector.QueryDatabase(Statement);
+            Connector.QueryDatabaseAdd(Statement);
         }
 
-        public IEnumerable<System.Data.IDataRecord> InsertSM(String SName, int PID, string Abr)
+        public void InsertSM(String SName, int PID, string Abr)
         {
             Statement = "INSERT INTO SuccessMap(SMName, PrgmID, Abbr) " +
                         "VALUES('"+SName+"','"+PID+"','"+Abr+"')";
 
-            return Connector.QueryDatabase(Statement);
+            Connector.QueryDatabaseAdd(Statement);
         }
     }
 }
