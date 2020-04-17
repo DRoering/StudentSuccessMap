@@ -19,5 +19,22 @@ namespace Student_Success_Planner.Data
 
             return new College(ID, name, abbreviation);
         }
+
+        public static Department getDepartment(DataRow data)
+        {
+            int ID = (int)data["DepartmentID"];
+            string name = data["DeptName"].ToString();
+
+            return new Department(ID, name);
+        }
+
+        public static Program getProgram(DataRow data)
+        {
+            int ID = (int)data["PrgmID"];
+            string name = data["PrgmName"].ToString();
+            string abbreviation = data["Abbr"].ToString();
+
+            return new Program(ID, name, abbreviation);
+        }
     }
 }

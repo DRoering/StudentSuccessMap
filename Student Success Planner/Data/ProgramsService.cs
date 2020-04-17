@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,26 +23,18 @@ namespace Student_Success_Planner.Data
             if (department.programs != null)
                 return Task.FromResult(department.programs);
 
-            //Retrieve data here
+            //Get programs from database
+            DatabaseSelect dbSelect = new DatabaseSelect();
+            DataTable programsTable = dbSelect.SelectPrograms(department.ID);
 
-            ////Hard code data for now, only for Computer Science & Information Technology
-            //if (department.getName() == "Computer Science & Information Technology")
-            //{
-            //    Program[] programs = new Program[4]
-            //    {
-            //        new Program("Computer Science", "CSCI"),
-            //        new Program("Cyber Security", "CNA"),
-            //        new Program("Software Engineering", "SE"),
-            //        new Program("Computer Science (MS)", "CSCI MS")
-            //    };
+            //Convert data to Program objects
+            List<Program> programs = new List<Program>();
+            foreach (DataRow row in programsTable.Rows)
+            {
+                programs.Add(DataInterpreter.getProgram(row));
+            }
 
-            //    //Populate the college with the departments for later reference
-            //    department.programs = programs;
-
-            //    return Task.FromResult(programs);
-            //}
-            //else
-                return null;
+            return Task.FromResult(programs.ToArray());
         }
     }
 }

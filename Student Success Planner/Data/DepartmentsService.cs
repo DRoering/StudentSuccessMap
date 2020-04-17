@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,32 +23,18 @@ namespace Student_Success_Planner.Data
             if (college.departments != null)
                 return Task.FromResult(college.departments);
 
-            //Retrieve data here
+            //Get departments from database
+            DatabaseSelect dbSelect = new DatabaseSelect();
+            DataTable departmentsTable = dbSelect.SelectDepartments(college.ID);
 
-            //Hard code data for now, only for COSE
-            //if (college.getAbbreviation() == "COSE")
-            //{
-            //    Department[] departments = new Department[10]
-            //    {
-            //        new Department("Biology"),
-            //        new Department("Chemistry & Biochemistry"),
-            //        new Department("Physics & Astronomy"),
-            //        new Department("Mathematics & Statistics"),
-            //        new Department("Applied Education in the MedTech Industry"),
-            //        new Department("Atmospheric and Hydrologic Sciences"),
-            //        new Department("Computer Science & Information Technology"),
-            //        new Department("Electrical & Computer Engineering"),
-            //        new Department("Environment & Technological Studies"),
-            //        new Department("Mechanical & Manufacturing Engineering")
-            //    };
+            //Convert data to Department objects
+            List<Department> departments = new List<Department>();
+            foreach (DataRow row in departmentsTable.Rows)
+            {
+                departments.Add(DataInterpreter.getDepartment(row));
+            }
 
-            //    //Populate the college with the departments for later reference
-            //    college.departments = departments;
-
-            //    return Task.FromResult(departments);
-            //}
-            //else
-                return null;
+            return Task.FromResult(departments.ToArray());
         }
     }
 }

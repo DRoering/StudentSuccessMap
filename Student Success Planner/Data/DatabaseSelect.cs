@@ -29,7 +29,7 @@ namespace Student_Success_Planner.Data
         }
 
         //Selects all Program table information with a DepartmentID
-        public DataTable SelectProgram(int DID)
+        public DataTable SelectPrograms(int DID)
         {
             Statement = "Select * FROM Program WHERE DeptID =" + DID;
 
