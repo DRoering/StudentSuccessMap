@@ -8,6 +8,11 @@ namespace Student_Success_Planner.Data
     public class SuccessMap
     {
         /// <summary>
+        /// Unique ID of this success map.
+        /// </summary>
+        public int ID { get; set; }
+
+        /// <summary>
         /// Categories of success objectives in the success map.
         /// </summary>
         public SuccessCategory[] SuccessCategories

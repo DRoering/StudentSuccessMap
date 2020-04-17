@@ -25,28 +25,28 @@ namespace Student_Success_Planner.Data
             //Retrieve data here
 
             //Hard code data for now, only for COSE
-            if (college.getAbbreviation() == "COSE")
-            {
-                Department[] departments = new Department[10]
-                {
-                    new Department("Biology"),
-                    new Department("Chemistry & Biochemistry"),
-                    new Department("Physics & Astronomy"),
-                    new Department("Mathematics & Statistics"),
-                    new Department("Applied Education in the MedTech Industry"),
-                    new Department("Atmospheric and Hydrologic Sciences"),
-                    new Department("Computer Science & Information Technology"),
-                    new Department("Electrical & Computer Engineering"),
-                    new Department("Environment & Technological Studies"),
-                    new Department("Mechanical & Manufacturing Engineering")
-                };
+            //if (college.getAbbreviation() == "COSE")
+            //{
+            //    Department[] departments = new Department[10]
+            //    {
+            //        new Department("Biology"),
+            //        new Department("Chemistry & Biochemistry"),
+            //        new Department("Physics & Astronomy"),
+            //        new Department("Mathematics & Statistics"),
+            //        new Department("Applied Education in the MedTech Industry"),
+            //        new Department("Atmospheric and Hydrologic Sciences"),
+            //        new Department("Computer Science & Information Technology"),
+            //        new Department("Electrical & Computer Engineering"),
+            //        new Department("Environment & Technological Studies"),
+            //        new Department("Mechanical & Manufacturing Engineering")
+            //    };
 
-                //Populate the college with the departments for later reference
-                college.departments = departments;
+            //    //Populate the college with the departments for later reference
+            //    college.departments = departments;
 
-                return Task.FromResult(departments);
-            }
-            else
+            //    return Task.FromResult(departments);
+            //}
+            //else
                 return null;
         }
     }

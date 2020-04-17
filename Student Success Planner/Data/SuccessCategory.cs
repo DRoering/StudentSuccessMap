@@ -8,14 +8,20 @@ namespace Student_Success_Planner.Data
     public class SuccessCategory
     {
         /// <summary>
+        /// Unique ID of this success category.
+        /// </summary>
+        public int ID { get; set; }
+
+        /// <summary>
         /// Name of the category.
         /// </summary>
         public string Name { get; set; }
 
         public SuccessCategory() { }
 
-        public SuccessCategory(string name)
+        public SuccessCategory(int ID, string name)
         {
+            this.ID = ID;
             Name = name;
         }
     }

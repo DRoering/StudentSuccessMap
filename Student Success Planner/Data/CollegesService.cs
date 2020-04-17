@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace Student_Success_Planner.Data
 {
@@ -12,20 +13,18 @@ namespace Student_Success_Planner.Data
         /// </summary>
         public Task<College[]> getCollegesAsync()
         {
-            //Retrieve data here
+            //Get colleges from database
+            DatabaseSelect dbSelect = new DatabaseSelect();
+            DataTable collegeTable = dbSelect.SelectColleges();
 
-            //Hard code data for now
-            College[] colleges = new College[6]
+            //Convert data to College objects
+            List<College> colleges = new List<College>();
+            foreach (DataRow row in collegeTable.Rows)
             {
-                new College("Liberal Arts", "CLA"),
-                new College("Herberger Business School", "HBS"),
-                new College("School of Public Affairs", "SOPA"),
-                new College("College of Science and Engineering", "COSE"),
-                new College("School of Education", "SOE"),
-                new College("School of Health and Human Services", "SHHS")
-            };
+                colleges.Add(DataInterpreter.getCollege(row));
+            }
 
-            return Task.FromResult(colleges);
+            return Task.FromResult(colleges.ToArray());
         }
     }
 }

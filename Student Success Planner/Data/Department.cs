@@ -12,10 +12,16 @@ namespace Student_Success_Planner.Data
         /// </summary>
         public Program[] programs { get; set; }
 
+        /// <summary>
+        /// Unique ID of this department.
+        /// </summary>
+        public int ID { get; }
+
         private string name;
 
-        public Department(string name)
+        public Department(int ID, string name)
         {
+            this.ID = ID;
             this.name = name;
         }
 

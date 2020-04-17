@@ -12,11 +12,17 @@ namespace Student_Success_Planner.Data
         /// </summary>
         public SuccessMap successMap { get; set; }
 
+        /// <summary>
+        /// Unique ID of this program.
+        /// </summary>
+        public int ID { get; }
+
         private string name;
         private string abbreviation;
 
-        public Program(string name, string abbreviation)
+        public Program(int ID, string name, string abbreviation)
         {
+            this.ID = ID;
             this.name = name;
             this.abbreviation = abbreviation;
         }

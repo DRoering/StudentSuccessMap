@@ -24,23 +24,23 @@ namespace Student_Success_Planner.Data
 
             //Retrieve data here
 
-            //Hard code data for now, only for Computer Science & Information Technology
-            if (department.getName() == "Computer Science & Information Technology")
-            {
-                Program[] programs = new Program[4]
-                {
-                    new Program("Computer Science", "CSCI"),
-                    new Program("Cyber Security", "CNA"),
-                    new Program("Software Engineering", "SE"),
-                    new Program("Computer Science (MS)", "CSCI MS")
-                };
+            ////Hard code data for now, only for Computer Science & Information Technology
+            //if (department.getName() == "Computer Science & Information Technology")
+            //{
+            //    Program[] programs = new Program[4]
+            //    {
+            //        new Program("Computer Science", "CSCI"),
+            //        new Program("Cyber Security", "CNA"),
+            //        new Program("Software Engineering", "SE"),
+            //        new Program("Computer Science (MS)", "CSCI MS")
+            //    };
 
-                //Populate the college with the departments for later reference
-                department.programs = programs;
+            //    //Populate the college with the departments for later reference
+            //    department.programs = programs;
 
-                return Task.FromResult(programs);
-            }
-            else
+            //    return Task.FromResult(programs);
+            //}
+            //else
                 return null;
         }
     }

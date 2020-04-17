@@ -8,6 +8,11 @@ namespace Student_Success_Planner.Data
     public class SchoolYear
     {
         /// <summary>
+        /// Which year of school this is. Ex: 1, 2, 3, 4
+        /// </summary>
+        public int Year { get; set; }
+
+        /// <summary>
         /// Year in school for a student. Example: Freshman
         /// </summary>
         public string StudentClass { get; set; }
@@ -34,13 +39,15 @@ namespace Student_Success_Planner.Data
 
         public SchoolYear() { }
 
-        public SchoolYear(string studentClass)
+        public SchoolYear(int year, string studentClass)
         {
+            Year = year;
             StudentClass = studentClass;
         }
 
-        public SchoolYear(string studentClass, Semester fall, Semester spring, Semester summer)
+        public SchoolYear(int year, string studentClass, Semester fall, Semester spring, Semester summer)
         {
+            Year = year;
             StudentClass = studentClass;
             Fall = fall;
             Spring = spring;

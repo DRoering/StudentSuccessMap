@@ -11,27 +11,23 @@ namespace Student_Success_Planner.Data
 {
     public class DBConnector
     {
-        public IEnumerable<IDataRecord> QueryDatabase(String Query)
+        public DataTable QueryDatabase(String Query)
         {
-            List<MySqlDataReader> readerList = new List<MySqlDataReader>();
+            DataTable dataTable = null;
 
-            string connStr = "server=localhost;user=root;database=SMDatabase;port=3306;password=1234";
+            string connStr = "server=localhost;user=root;database=SuccessMapDatabase;port=3306;password=1234";
             MySqlConnection conn = new MySqlConnection(connStr);
             try
             {
                 Console.WriteLine("Connecting to MySQL...");
-                conn.Open();
 
-                string sql = Query;
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                //adapter automatically opens connection
+                MySqlDataAdapter adapter = new MySqlDataAdapter(Query, conn);
+                adapter.SelectCommand.CommandType = CommandType.Text;
 
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        readerList.Add(reader);
-                    }
-                }
+                //Fill data table with result of query
+                dataTable = new DataTable();
+                adapter.Fill(dataTable);
             }
             catch (Exception ex)
             {
@@ -41,14 +37,12 @@ namespace Student_Success_Planner.Data
             conn.Close();
             Console.WriteLine("Done.");
 
-            return readerList;
+            return dataTable;
         }
 
         public void QueryDatabaseModify(String Query)
         {
-            List<MySqlDataReader> readerList = new List<MySqlDataReader>();
-
-            string connStr = "server=localhost;user=root;database=SMDatabase;port=3306;password=1234";
+            string connStr = "server=localhost;user=root;database=SuccessMapDatabase;port=3306;password=1234";
             MySqlConnection conn = new MySqlConnection(connStr);
             try
             {
