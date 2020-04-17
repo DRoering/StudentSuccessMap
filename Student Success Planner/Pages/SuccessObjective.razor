@@ -1,0 +1,60 @@
+﻿@using Student_Success_Planner.Data
+
+@if (successObjective != null)
+{
+    <style>
+        tr {
+            vertical-align: top;
+        }
+    </style>
+
+    <tr class="successObjective">
+        <!--Need to change display based on type of success objective-->
+        @if (successObjective is Course)
+        {
+            Course course = (Course)successObjective;
+
+            //Display differently based on Course type
+            @switch (course.Type)
+            {
+                case (CourseType.GoalArea):
+                    <td class="course goalArea">
+                        @course.CourseID
+                    </td>
+                    break;
+                case (CourseType.ProgramCore):
+                    <td class="course majorCore">
+                        @course.CourseID
+                    </td>
+                    break;
+                case (CourseType.Elective):
+                    <td class="course elective">
+                        @course.CourseID
+                    </td>
+                    break;
+                default:
+                    <td class="course">
+                        @course.CourseID
+                    </td>
+                    break;
+            }
+        }
+        else if (successObjective is SuccessActivity)
+        {
+            <td class="successActivity">
+                @successObjective.Name
+            </td>
+        }
+        else //Default to name if type cannot be determined by previous checks
+        {
+            <td>
+                @successObjective.Name
+            </td>
+        }
+    </tr>
+}
+
+@code {
+    [Parameter]
+    public Student_Success_Planner.Data.SuccessObjective successObjective { get; set; }
+}

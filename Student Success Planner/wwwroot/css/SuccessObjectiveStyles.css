@@ -1,0 +1,25 @@
+﻿.successObjective {
+    font-size: 10px;
+    border-radius: 1px;
+    font-weight: bold;
+}
+
+.course {
+    color: white;
+}
+
+.course.goalArea {
+    background-color: #007acc;
+}
+
+.course.majorCore {
+    background-color: #005c99;
+}
+
+.course.elective {
+    background-color: #003d66;
+}
+
+.successActivity {
+    background-color: #00d4bb;
+}
