@@ -45,7 +45,7 @@ namespace Student_Success_Planner.Data
         }
 
         //Objective ID to select Objective info
-        public DataTable SelectObjective(int OID)
+        public DataTable SelectObjective(string OID)
         {
             Statement = "Select * FROM Objective WHERE ObjectiveID =" + OID;
 
@@ -69,9 +69,17 @@ namespace Student_Success_Planner.Data
         }
 
         //Year to select semesters
-        public DataTable SelectSemester(int Yr)
+        //public DataTable SelectSemester(int Yr)
+        //{
+        //    Statement = "Select * FROM  Semester WHERE Year =" + Yr;
+
+        //    return Connector.QueryDatabase(Statement);
+        //}
+
+        //Semester ID to select semesters
+        public DataTable SelectSemester(int semesterID)
         {
-            Statement = "Select * FROM  Semester WHERE Year =" + Yr;
+            Statement = "Select * FROM  Semester WHERE SemesterID =" + semesterID;
 
             return Connector.QueryDatabase(Statement);
         }
@@ -84,6 +92,14 @@ namespace Student_Success_Planner.Data
             return Connector.QueryDatabase(Statement);
         }
 
+        //Success Objective Classifier ID to select Success Objective Classifier info
+        public DataTable SelectClassifier(int classificationID)
+        {
+            Statement = "Select * FROM SuccessObjectiveClassification WHERE ClassificationID =" + classificationID;
+
+            return Connector.QueryDatabase(Statement);
+        }
+
         //Objective ID to select Success Objective map
         public DataTable SelectSuccessObjMapObjective(int OID)
         {
@@ -92,8 +108,8 @@ namespace Student_Success_Planner.Data
             return Connector.QueryDatabase(Statement);
         }
 
-        //Semester ID to select Success Objective map
-        public DataTable SelectSuccessObjMapSemester(int SID)
+        //Success Map ID to select Success Objective map
+        public DataTable SelectSuccessObjMapSuccessMap(int SID)
         {
             Statement = "Select * FROM SuccessObjectiveMapping WHERE SMID =" + SID;
 

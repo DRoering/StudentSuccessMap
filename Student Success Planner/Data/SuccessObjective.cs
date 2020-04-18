@@ -10,7 +10,7 @@ namespace Student_Success_Planner.Data
         /// <summary>
         /// Unique ID of this objective.
         /// </summary>
-        public int ID { get; }
+        public string ID { get; }
 
         /// <summary>
         /// Name of the success objective.
@@ -37,7 +37,7 @@ namespace Student_Success_Planner.Data
         /// </summary>
         public SuccessObjectiveClassifier Classifier;
 
-        public SuccessObjective(int ID, string name, string description, string externalLink, int weight,
+        public SuccessObjective(string ID, string name, string description, string externalLink, int weight,
             SuccessObjectiveClassifier classifier)
         {
             this.ID = ID;

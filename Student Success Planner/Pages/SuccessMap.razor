@@ -112,7 +112,7 @@ else
             @for (int i = 0; i < successMap.SchoolYears.Length; i++)
             {
                 <th colspan="3" class="labelCell @("schoolYear" + i) layoutCell" style="width: @(yearColumnWidth + "%")">
-                    Year @(i + 1) <br />
+                    Year @(successMap.SchoolYears[i].Year) <br />
                     @successMap.SchoolYears[i].StudentClass
                 </th>
             }

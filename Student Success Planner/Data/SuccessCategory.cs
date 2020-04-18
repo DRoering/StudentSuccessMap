@@ -10,7 +10,7 @@ namespace Student_Success_Planner.Data
         /// <summary>
         /// Unique ID of this success category.
         /// </summary>
-        public int ID { get; set; }
+        public int ID { get; }
 
         /// <summary>
         /// Name of the category.

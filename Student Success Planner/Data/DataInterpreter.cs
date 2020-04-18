@@ -36,5 +36,165 @@ namespace Student_Success_Planner.Data
 
             return new Program(ID, name, abbreviation);
         }
+
+        public static SuccessMap getSuccessMap(DataRow data)
+        {
+            int ID = (int)data["SMID"];
+            string name = data["SMName"].ToString();
+
+            SuccessMap successMap = new SuccessMap(ID, name);
+
+            DatabaseSelect dbSelect = new DatabaseSelect();
+
+            DataTable objectiveMappingsTable = dbSelect.SelectSuccessObjMapSuccessMap(ID);
+
+            //The success map has success objectives
+            if (objectiveMappingsTable != null)
+            {
+                Dictionary<int, SuccessCategory> categories = new Dictionary<int, SuccessCategory>();
+                Dictionary<int, SuccessObjectiveClassifier> classifiers = new Dictionary<int, SuccessObjectiveClassifier>();
+                Dictionary<int, Semester> semesters = new Dictionary<int, Semester>();
+                Dictionary<int, SchoolYear> schoolYears = new Dictionary<int, SchoolYear>();
+
+                foreach (DataRow mappingData in objectiveMappingsTable.Rows)
+                {
+                    string objectiveID = mappingData["ObjID"].ToString();
+                    int semesterID = (int)mappingData["SemesterID"];
+                    int categoryID = (int)mappingData["CategoryID"];
+                    int classifierID = (int)mappingData["ClassificationID"];
+                    int weight = (int)mappingData["Weight"];
+
+                    SuccessObjective successObjective = null;
+
+                    //Get success objective classifier if it doesn't already exist
+                    if (!classifiers.ContainsKey(classifierID))
+                    {
+                        DataTable classifierTable = dbSelect.SelectClassifier(classifierID);
+                        if (classifierTable != null) //Classifier exists
+                        {
+                            classifiers.Add(classifierID, getSuccessObjectiveClassifier(classifierTable.Rows[0]));
+                        }
+                    }
+
+                    //Get success objective
+                    DataTable objectiveTable = dbSelect.SelectObjective(objectiveID);
+                    if (objectiveTable != null) //Objective exists
+                    {
+                        successObjective = getSuccessObjective(objectiveTable.Rows[0], weight, classifiers[classifierID]);
+                    }
+
+                    //Get success category if it doesn't already exist
+                    if (!categories.ContainsKey(categoryID))
+                    {
+                        DataTable categoryTable = dbSelect.SelectCategory(categoryID);
+                        if (categoryTable != null) //Category exists
+                        {
+                            categories.Add(categoryID, getSuccessCategory(categoryTable.Rows[0]));
+                        }
+                    }
+
+                    //Get semester if it doesn't already exist
+                    if (!semesters.ContainsKey(semesterID))
+                    {
+                        DataTable semesterTable = dbSelect.SelectSemester(semesterID);
+                        if (semesterTable != null) //Semester exists
+                        {
+                            int year;
+                            semesters.Add(semesterID, getSemester(semesterTable.Rows[0], out year));
+
+                            //Get year if it doesn't already exist
+                            if (!schoolYears.ContainsKey(year))
+                            {
+                                DataTable yearTable = dbSelect.SelectYear(year);
+                                if (yearTable != null) //Year exists
+                                {
+                                    schoolYears.Add(year, getSchoolYear(yearTable.Rows[0]));
+                                }
+                            }
+
+                            //Add semester to year
+                            Semester semester = semesters[semesterID];
+                            SchoolYear schoolYear = schoolYears[year];
+                            semester.SchoolYear = schoolYear;
+
+                            //Associate semester with school year
+                            string lowerCaseName = semester.Name.ToLower();
+                            if (lowerCaseName.Contains("fall"))
+                                schoolYear.Fall = semester;
+                            else if (lowerCaseName.Contains("spring"))
+                                schoolYear.Spring = semester;
+                            else if (lowerCaseName.Contains("summer"))
+                                schoolYear.Summer = semester;
+                        }
+                    }
+
+                    SuccessCategory category = categories[categoryID];
+                    Semester objectiveSemester = semesters[semesterID];
+
+                    //Add success objective to the success map if all the required data is present
+                    if (successObjective != null && category != null && objectiveSemester != null)
+                        successMap.addSuccessObjective(category, objectiveSemester, successObjective);
+                    else
+                        Console.WriteLine("Could not add success objective to success map, missing required data.");
+                }
+            }
+
+            return successMap;
+        }
+
+        public static SuccessObjective getSuccessObjective(DataRow data, int weight, SuccessObjectiveClassifier classifier)
+        {
+            string ID = data["ObjID"].ToString();
+            string name = data["ObjName"].ToString();
+            string description = data["Description"].ToString();
+            string link = data["Link"].ToString();
+            string type = data["Type"].ToString().ToLower();
+
+            if (type.Contains("course"))
+            {
+                if (type.Contains("goalarea"))
+                    return new Course(ID, name, description, link, weight, classifier, ID, CourseType.GoalArea);
+                else if (type.Contains("programcore"))
+                    return new Course(ID, name, description, link, weight, classifier, ID, CourseType.ProgramCore);
+                else //Elective
+                    return new Course(ID, name, description, link, weight, classifier, ID, CourseType.Elective);
+            }
+            else if (type.Contains("activity"))
+                return new SuccessActivity(ID, name, description, link, weight, classifier);
+            else
+                return null;
+
+        }
+
+        public static SuccessCategory getSuccessCategory(DataRow data)
+        {
+            int ID = (int)data["CategoryID"];
+            string name = data["Name"].ToString();
+            return new SuccessCategory(ID, name);
+        }
+
+        public static SuccessObjectiveClassifier getSuccessObjectiveClassifier(DataRow data)
+        {
+            int ID = (int)data["ClassificationID"];
+            string name = data["Name"].ToString();
+            return new SuccessObjectiveClassifier(ID, name);
+        }
+
+        public static Semester getSemester(DataRow data, out int year)
+        {
+            int ID = (int)data["SemesterID"];
+            year = (int)data["Year"];
+            string name = data["SemesterName"].ToString();
+
+            return new Semester(ID, name);
+        }
+
+        public static SchoolYear getSchoolYear(DataRow data)
+        {
+            int year = (int)data["Year"];
+            string studentClass = data["Class"].ToString();
+
+            return new SchoolYear(year, studentClass);
+        }
     }
 }
