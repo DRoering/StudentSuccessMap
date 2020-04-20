@@ -7,8 +7,8 @@ namespace Student_Success_Planner.Data
 {
     public class SuccessActivity : SuccessObjective
     {
-        public SuccessActivity(string name, string description, string externalLink, int weight,
+        public SuccessActivity(string ID, string name, string description, string externalLink, int weight,
             SuccessObjectiveClassifier classifier)
-            : base(name, description, externalLink, weight, classifier) { }
+            : base(ID, name, description, externalLink, weight, classifier) { }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-
-using MySql.Data;
-using MySql.Data.MySqlClient;
 
 namespace Student_Success_Planner.Data
 {
@@ -15,7 +13,7 @@ namespace Student_Success_Planner.Data
         private string Statement = "";
 
         //Selects all College table information from the database
-        public IEnumerable<System.Data.IDataRecord> SelectColleges()
+        public DataTable SelectColleges()
         {
             Statement = "SELECT * FROM College";
 
@@ -23,7 +21,7 @@ namespace Student_Success_Planner.Data
         }
 
         //Selects all Department table information with a CollegeID
-        public IEnumerable<System.Data.IDataRecord> SelectDepartments(int CID)
+        public DataTable SelectDepartments(int CID)
         {
             Statement = "Select * FROM Department WHERE CollegeID =" + CID;
 
@@ -31,7 +29,7 @@ namespace Student_Success_Planner.Data
         }
 
         //Selects all Program table information with a DepartmentID
-        public IEnumerable<System.Data.IDataRecord> SelectProgram(int DID)
+        public DataTable SelectPrograms(int DID)
         {
             Statement = "Select * FROM Program WHERE DeptID =" + DID;
 
@@ -39,7 +37,7 @@ namespace Student_Success_Planner.Data
         }
 
         //Selects all SuccessMap table information with a ProgramID
-        public IEnumerable<System.Data.IDataRecord> SelectSuccessMap(int PID)
+        public DataTable SelectSuccessMap(int PID)
         {
             Statement = "Select * FROM SuccessMap WHERE PrgmID =" + PID;
 
@@ -47,15 +45,15 @@ namespace Student_Success_Planner.Data
         }
 
         //Objective ID to select Objective info
-        public IEnumerable<System.Data.IDataRecord> SelectObjective(int OID)
+        public DataTable SelectObjective(string OID)
         {
-            Statement = "Select * FROM Objective WHERE ObjectiveID =" + OID;
+            Statement = "Select * FROM Objective WHERE ObjID = '" + OID + "'";
 
             return Connector.QueryDatabase(Statement);
         }
 
         //Select all years
-        public IEnumerable<System.Data.IDataRecord> SelectAllYears()
+        public DataTable SelectAllYears()
         {
             Statement = "Select * FROM Year";
 
@@ -63,7 +61,7 @@ namespace Student_Success_Planner.Data
         }
 
         //Year to select Year info
-        public IEnumerable<System.Data.IDataRecord> SelectYear(int Yr)
+        public DataTable SelectYear(int Yr)
         {
             Statement = "Select * FROM Year WHERE Year =" + Yr;
 
@@ -71,31 +69,47 @@ namespace Student_Success_Planner.Data
         }
 
         //Year to select semesters
-        public IEnumerable<System.Data.IDataRecord> SelectSemester(int Yr)
+        //public DataTable SelectSemester(int Yr)
+        //{
+        //    Statement = "Select * FROM  Semester WHERE Year =" + Yr;
+
+        //    return Connector.QueryDatabase(Statement);
+        //}
+
+        //Semester ID to select semesters
+        public DataTable SelectSemester(int semesterID)
         {
-            Statement = "Select * FROM  Semester WHERE Year =" + Yr;
+            Statement = "Select * FROM  Semester WHERE SemesterID =" + semesterID;
 
             return Connector.QueryDatabase(Statement);
         }
 
         //Success Category ID to select Success Category info
-        public IEnumerable<System.Data.IDataRecord> SelectCategory(int CID)
+        public DataTable SelectCategory(int CID)
         {
             Statement = "Select * FROM SuccessCategory WHERE CategoryID =" + CID;
 
             return Connector.QueryDatabase(Statement);
         }
 
+        //Success Objective Classifier ID to select Success Objective Classifier info
+        public DataTable SelectClassifier(int classificationID)
+        {
+            Statement = "Select * FROM SuccessObjectiveClassification WHERE ClassificationID =" + classificationID;
+
+            return Connector.QueryDatabase(Statement);
+        }
+
         //Objective ID to select Success Objective map
-        public IEnumerable<System.Data.IDataRecord> SelectSuccessObjMapObjective(int OID)
+        public DataTable SelectSuccessObjMapObjective(int OID)
         {
             Statement = "Select * FROM SuccessObjectiveMapping WHERE ObjID =" + OID;
 
             return Connector.QueryDatabase(Statement);
         }
 
-        //Semester ID to select Success Objective map
-        public IEnumerable<System.Data.IDataRecord> SelectSuccessObjMapSemester(int SID)
+        //Success Map ID to select Success Objective map
+        public DataTable SelectSuccessObjMapSuccessMap(int SID)
         {
             Statement = "Select * FROM SuccessObjectiveMapping WHERE SMID =" + SID;
 

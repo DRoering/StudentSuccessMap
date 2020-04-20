@@ -12,11 +12,17 @@ namespace Student_Success_Planner.Data
         /// </summary>
         public Department[] departments { get; set; }
 
+        /// <summary>
+        /// Unique ID of this college.
+        /// </summary>
+        public int ID { get; }
+
         private string name;
         private string abbreviation;
 
-        public College(string name, string abbreviation)
+        public College(int ID, string name, string abbreviation)
         {
+            this.ID = ID;
             this.name = name;
             this.abbreviation = abbreviation;
         }

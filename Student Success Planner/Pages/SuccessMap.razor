@@ -112,7 +112,7 @@ else
             @for (int i = 0; i < successMap.SchoolYears.Length; i++)
             {
                 <th colspan="3" class="labelCell @("schoolYear" + i) layoutCell" style="width: @(yearColumnWidth + "%")">
-                    Year @(i + 1) <br />
+                    Year @(successMap.SchoolYears[i].Year) <br />
                     @successMap.SchoolYears[i].StudentClass
                 </th>
             }
@@ -124,13 +124,22 @@ else
             @for (int i = 0; i < successMap.SchoolYears.Length; i++)
             {
                 <th class="labelCell @("schoolYear" + i) layoutCell">
-                    @successMap.SchoolYears[i].Fall.Name
+                    @if (successMap.SchoolYears[i].Fall != null)
+                        @successMap.SchoolYears[i].Fall.Name
+                    else
+                        @("Fall")
                 </th>
                 <th class="labelCell @("schoolYear" + i) layoutCell">
-                    @successMap.SchoolYears[i].Spring.Name
+                    @if (successMap.SchoolYears[i].Spring != null)
+                        @successMap.SchoolYears[i].Spring.Name
+                    else
+                        @("Spring")
                 </th>
                 <th class="labelCell @("schoolYear" + i) layoutCell">
-                    @successMap.SchoolYears[i].Summer.Name
+                    @if (successMap.SchoolYears[i].Summer != null)
+                        @successMap.SchoolYears[i].Summer.Name
+                    else
+                        @("Summer")
                 </th>
             }
         </tr>

@@ -17,9 +17,9 @@ namespace Student_Success_Planner.Data
         /// </summary>
         public CourseType Type { get; set; }
 
-        public Course(string name, string description, string externalLink, int weight,
+        public Course(string ID, string name, string description, string externalLink, int weight,
             SuccessObjectiveClassifier classifier, string courseID, CourseType type)
-            : base(name, description, externalLink, weight, classifier)
+            : base(ID, name, description, externalLink, weight, classifier)
         {
             CourseID = courseID;
             Type = type;

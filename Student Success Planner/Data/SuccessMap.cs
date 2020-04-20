@@ -8,13 +8,29 @@ namespace Student_Success_Planner.Data
     public class SuccessMap
     {
         /// <summary>
+        /// Unique ID of this success map.
+        /// </summary>
+        public int ID { get; }
+
+        /// <summary>
+        /// Name of this success map.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Categories of success objectives in the success map.
         /// </summary>
         public SuccessCategory[] SuccessCategories
         {
             get
             {
-                return successCategories.ToArray();
+                //Sort success categories by ID in ascending order
+                SuccessCategory[] sortedCategories = successCategories.ToArray();
+                Array.Sort(sortedCategories,
+                    delegate (SuccessCategory s1, SuccessCategory s2) {
+                        return s1.ID.CompareTo(s2.ID);
+                    });
+                return sortedCategories.ToArray();
             }
         }
         private List<SuccessCategory> successCategories;
@@ -26,7 +42,13 @@ namespace Student_Success_Planner.Data
         {
             get
             {
-                return schoolYears.ToArray();
+                //Sort school years by year in ascending order
+                SchoolYear[] sortedSchoolYears = schoolYears.ToArray();
+                Array.Sort(sortedSchoolYears,
+                    delegate (SchoolYear y1, SchoolYear y2) {
+                        return y1.Year.CompareTo(y2.Year);
+                    });
+                return sortedSchoolYears;
             }
         }
         private List<SchoolYear> schoolYears;
@@ -60,8 +82,10 @@ namespace Student_Success_Planner.Data
         /// </summary>
         private Dictionary<Tuple<SuccessCategory, Semester>, List<SuccessObjective>> successObjectives;
 
-        public SuccessMap()
+        public SuccessMap(int ID, string name)
         {
+            this.ID = ID;
+            Name = name;
             successCategories = new List<SuccessCategory>();
             schoolYears = new List<SchoolYear>();
             objectiveClassifiers = new List<SuccessObjectiveClassifier>();
@@ -69,9 +93,11 @@ namespace Student_Success_Planner.Data
             allSuccessObjectives = new List<SuccessObjective>();
         }
 
-        public SuccessMap(ICollection<SuccessCategory> successCategories, ICollection<SchoolYear> schoolYears,
+        public SuccessMap(int ID, string name, ICollection<SuccessCategory> successCategories, ICollection<SchoolYear> schoolYears,
             ICollection<SuccessObjectiveClassifier> objectiveClassifiers)
         {
+            this.ID = ID;
+            Name = name;
             this.successCategories = new List<SuccessCategory>(successCategories);
             this.schoolYears = new List<SchoolYear>(schoolYears);
             this.objectiveClassifiers = new List<SuccessObjectiveClassifier>(objectiveClassifiers);

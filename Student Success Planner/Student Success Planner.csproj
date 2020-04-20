@@ -18,6 +18,7 @@
     <PackageReference Include="MatBlazor" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.2" />
+    <PackageReference Include="MySqlConnector" Version="0.63.2" />
   </ItemGroup>
 
   <ItemGroup>
