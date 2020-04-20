@@ -49,7 +49,7 @@ namespace Student_Success_Planner.Data
             DataTable objectiveMappingsTable = dbSelect.SelectSuccessObjMapSuccessMap(ID);
 
             //The success map has success objectives
-            if (objectiveMappingsTable != null)
+            if (objectiveMappingsTable != null && objectiveMappingsTable.Rows.Count > 0)
             {
                 Dictionary<int, SuccessCategory> categories = new Dictionary<int, SuccessCategory>();
                 Dictionary<int, SuccessObjectiveClassifier> classifiers = new Dictionary<int, SuccessObjectiveClassifier>();
@@ -61,43 +61,60 @@ namespace Student_Success_Planner.Data
                     string objectiveID = mappingData["ObjID"].ToString();
                     int semesterID = (int)mappingData["SemesterID"];
                     int categoryID = (int)mappingData["CategoryID"];
-                    int classifierID = (int)mappingData["ClassificationID"];
                     int weight = (int)mappingData["Weight"];
+
+                    //Classifier optional
+                    int classifierID;
+                    try
+                    {
+                        classifierID = (int)mappingData["ClassificationID"];
+
+                        //Get success objective classifier if it doesn't already exist
+                        if (!classifiers.ContainsKey(classifierID))
+                        {
+                            DataTable classifierTable = dbSelect.SelectClassifier(classifierID);
+                            if (classifierTable != null && classifierTable.Rows.Count > 0) //Classifier exists
+                            {
+                                classifiers.Add(classifierID, getSuccessObjectiveClassifier(classifierTable.Rows[0]));
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        classifierID = default;
+                        Console.WriteLine("Classifier ID not provided for objective: " + objectiveID);
+                    }
 
                     SuccessObjective successObjective = null;
 
-                    //Get success objective classifier if it doesn't already exist
-                    if (!classifiers.ContainsKey(classifierID))
-                    {
-                        DataTable classifierTable = dbSelect.SelectClassifier(classifierID);
-                        if (classifierTable != null) //Classifier exists
-                        {
-                            classifiers.Add(classifierID, getSuccessObjectiveClassifier(classifierTable.Rows[0]));
-                        }
-                    }
-
                     //Get success objective
                     DataTable objectiveTable = dbSelect.SelectObjective(objectiveID);
-                    if (objectiveTable != null) //Objective exists
+                    if (objectiveTable != null && objectiveTable.Rows.Count > 0) //Objective exists
                     {
-                        successObjective = getSuccessObjective(objectiveTable.Rows[0], weight, classifiers[classifierID]);
+                        //Check if objective has a classifier
+                        SuccessObjectiveClassifier classifier = classifierID != default ? classifiers[classifierID] : null;
+                        successObjective = getSuccessObjective(objectiveTable.Rows[0], weight, classifier);
                     }
+                    else
+                        Console.WriteLine("Could not retrieve success objective with ID: " + objectiveID);
 
                     //Get success category if it doesn't already exist
                     if (!categories.ContainsKey(categoryID))
                     {
                         DataTable categoryTable = dbSelect.SelectCategory(categoryID);
-                        if (categoryTable != null) //Category exists
+                        if (categoryTable != null && categoryTable.Rows.Count > 0) //Category exists
                         {
                             categories.Add(categoryID, getSuccessCategory(categoryTable.Rows[0]));
                         }
+                        else
+                            Console.WriteLine("Could not retrieve success category with ID: " + categoryID);
                     }
 
                     //Get semester if it doesn't already exist
                     if (!semesters.ContainsKey(semesterID))
                     {
                         DataTable semesterTable = dbSelect.SelectSemester(semesterID);
-                        if (semesterTable != null) //Semester exists
+                        if (semesterTable != null && semesterTable.Rows.Count > 0) //Semester exists
                         {
                             int year;
                             semesters.Add(semesterID, getSemester(semesterTable.Rows[0], out year));
@@ -106,10 +123,12 @@ namespace Student_Success_Planner.Data
                             if (!schoolYears.ContainsKey(year))
                             {
                                 DataTable yearTable = dbSelect.SelectYear(year);
-                                if (yearTable != null) //Year exists
+                                if (yearTable != null && yearTable.Rows.Count > 0) //Year exists
                                 {
                                     schoolYears.Add(year, getSchoolYear(yearTable.Rows[0]));
                                 }
+                                else
+                                    Console.WriteLine("Could not retrieve school year with ID: " + year);
                             }
 
                             //Add semester to year
@@ -137,6 +156,9 @@ namespace Student_Success_Planner.Data
                     else
                         Console.WriteLine("Could not add success objective to success map, missing required data.");
                 }
+
+                //Add classifiers to success map
+                successMap.addSuccessObjectiveClassifiers(classifiers.Values);
             }
 
             return successMap;

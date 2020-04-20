@@ -24,7 +24,13 @@ namespace Student_Success_Planner.Data
         {
             get
             {
-                return successCategories.ToArray();
+                //Sort success categories by ID in ascending order
+                SuccessCategory[] sortedCategories = successCategories.ToArray();
+                Array.Sort(sortedCategories,
+                    delegate (SuccessCategory s1, SuccessCategory s2) {
+                        return s1.ID.CompareTo(s2.ID);
+                    });
+                return sortedCategories.ToArray();
             }
         }
         private List<SuccessCategory> successCategories;

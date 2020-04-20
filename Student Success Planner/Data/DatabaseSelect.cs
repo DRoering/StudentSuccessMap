@@ -47,7 +47,7 @@ namespace Student_Success_Planner.Data
         //Objective ID to select Objective info
         public DataTable SelectObjective(string OID)
         {
-            Statement = "Select * FROM Objective WHERE ObjectiveID =" + OID;
+            Statement = "Select * FROM Objective WHERE ObjID = '" + OID + "'";
 
             return Connector.QueryDatabase(Statement);
         }

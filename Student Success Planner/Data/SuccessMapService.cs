@@ -27,7 +27,7 @@ namespace Student_Success_Planner.Data
             DataTable successMapTable = dbSelect.SelectSuccessMap(program.ID);
 
             //Make sure a success map was retrieved
-            if (successMapTable != null)
+            if (successMapTable != null && successMapTable.Rows.Count > 0)
             {
                 SuccessMap successMap = DataInterpreter.getSuccessMap(successMapTable.Rows[0]);
                 program.successMap = successMap;
