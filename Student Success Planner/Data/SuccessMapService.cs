@@ -38,158 +38,33 @@ namespace Student_Success_Planner.Data
         }
 
         /// <summary>
-        /// Gets a test success map for the SE program.
+        /// Gets a StudentSuccessMap for the student with the given star ID and Program.
         /// </summary>
-        /// <returns></returns>
-        //private SuccessMap getTestSESuccessMap()
-        //{
-        //    SuccessMap seMap = new SuccessMap();
+        /// /// <param name="starID">The Star ID of the student to retrieve a StudentSuccessMap for.</param>
+        /// <param name="program">The Program to retrieve a SuccessMap for.</param>
+        public Task<StudentSuccessMap> getStudentSuccessMapAsync(string starID, Program program)
+        {
+            //Can't retrieve success map without knowing the program to retrieve from (eventually)
+            if (program == null)
+                return null;
 
-        //    seMap.addSuccessCategories(new SuccessCategory[5]
-        //    {
-        //        new SuccessCategory("Soft Skills"),
-        //        new SuccessCategory("Life Long Learning Ability"),
-        //        new SuccessCategory("Special Technical Skills, Techniques and Tools"),
-        //        new SuccessCategory("Fundamental Knowledge"),
-        //        new SuccessCategory("Citizenship")
-        //    });
+            //Return program success map if already retrieved
+            //Don't refresh due to low frequency of change
+            if (program.successMap != null && program.successMap is StudentSuccessMap)
+                return Task.FromResult((StudentSuccessMap)program.successMap);
 
-        //    seMap.addSchoolYears(new SchoolYear[4]
-        //    {
-        //        new SchoolYear("Freshman"),
-        //        new SchoolYear("Sophomore"),
-        //        new SchoolYear("Junior"),
-        //        new SchoolYear("Senior")
-        //    });
+            DatabaseSelect dbSelect = new DatabaseSelect();
+            DataTable studentSuccessMapTable = dbSelect.SelectStudentSuccessMap(starID, program.ID);
 
-        //    foreach (SchoolYear schoolYear in seMap.SchoolYears)
-        //    {
-        //        schoolYear.Fall = new Semester("Fall", schoolYear);
-        //        schoolYear.Spring = new Semester("Spring", schoolYear);
-        //        schoolYear.Summer = new Semester("Summer", schoolYear);
-        //    }
-
-        //    #region Success Objective Classifers
-
-        //    SuccessObjectiveClassifier labs = new SuccessObjectiveClassifier("Labs & Experiential Learning");
-        //    SuccessObjectiveClassifier rsd =
-        //        new SuccessObjectiveClassifier("Read Search & Discuss (Exploratory assignment: literature review + oral presentation + report)");
-        //    SuccessObjectiveClassifier groupProjects = new SuccessObjectiveClassifier("Group-based Semester Long Industry-Directed Projects");
-        //    SuccessObjectiveClassifier researchActivities = new SuccessObjectiveClassifier("Research Activities");
-        //    SuccessObjectiveClassifier workExperience = new SuccessObjectiveClassifier("Professional Working Experience");
-
-        //    Dictionary<string, SuccessObjectiveClassifier> classifiers = new Dictionary<string, SuccessObjectiveClassifier>();
-        //    classifiers.Add(labs.Classifier, labs);
-        //    classifiers.Add(rsd.Classifier, rsd);
-        //    classifiers.Add(groupProjects.Classifier, groupProjects);
-        //    classifiers.Add(researchActivities.Classifier, researchActivities);
-        //    classifiers.Add(workExperience.Classifier, workExperience);
-
-        //    seMap.addSuccessObjectiveClassifiers(classifiers.Values);
-
-        //    #endregion Success Objective Classifers
-
-        //    #region Soft Skills
-
-        //    #region Freshman
-
-        //    seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[0].Fall, new List<SuccessObjective>()
-        //    {
-        //        new Course("Introduction to Computer Networking", "Test description",
-        //        "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+221",
-        //        1, rsd, "SE 221", CourseType.Elective),
-        //        new SuccessActivity("Hackathons", "Test description", "", 1, null)
-        //    });
-
-        //    seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[0].Spring, new List<SuccessObjective>()
-        //    {
-        //        new Course("Introduction to Computer Security", "Test description",
-        //        "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+231",
-        //        1, rsd, "SE 231", CourseType.ProgramCore),
-        //        new SuccessActivity("Hackathons", "Test description", "", 1, null),
-        //        new SuccessActivity("Husky Invent", "Test description", "", 1, null),
-        //    });
-
-        //    #endregion Freshman
-
-        //    #region Sophomore
-
-        //    seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[1].Fall, new List<SuccessObjective>()
-        //    {
-        //        new Course("Applied Undergraduate Research", "Test description",
-        //        "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+342",
-        //        1, groupProjects, "SE 340", CourseType.ProgramCore),
-        //        new Course("Communication in the Workplace", "Test description",
-        //        "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=CMST+341",
-        //        1, null, "CMST 341", CourseType.GoalArea),
-        //        new SuccessActivity("Std. Res. Grant", "Student Research Grant", "", 1, null)
-        //    });
-
-        //    seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[1].Spring, new List<SuccessObjective>()
-        //    {
-        //        new Course("Applied Undergraduate Research", "Test description",
-        //        "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+342",
-        //        1, groupProjects,  "SE 341", CourseType.ProgramCore),
-        //        new Course("Software Engineering and Human Computer Interaction", "Test description",
-        //        "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+350",
-        //        1, groupProjects, "SE 350", CourseType.ProgramCore),
-        //        new SuccessActivity("Std. Res. Grant", "Student Research Grant", "", 1, null),
-        //        new SuccessActivity("SCSU Colloquium", "Test description", "", 1, null)
-        //    });
-
-        //    #endregion Sophomore
-
-        //    #region Junior
-
-        //    seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[2].Fall, new List<SuccessObjective>()
-        //    {
-        //        new SuccessActivity("Hackathons", "Test description", "", 1, null),
-        //        new SuccessActivity("Corporate Visits", "Test description", "", 1, null)
-        //    });
-
-        //    seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[2].Spring, new List<SuccessObjective>()
-        //    {
-        //        new SuccessActivity("Hackathons", "Test description", "", 1, null),
-        //        new SuccessActivity("Mock Interview", "Test description", "", 1, null),
-        //        new SuccessActivity("Corporate Visits", "Test description", "", 1, null)
-        //    });
-
-        //    seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[2].Summer, new List<SuccessObjective>()
-        //    {
-        //        new Course("Internship", "Test description",
-        //        "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+444",
-        //        1, workExperience, "SE 444", CourseType.ProgramCore),
-        //        new SuccessActivity("Research Assist.", "Test description", "", 1, null)
-        //    });
-
-        //    #endregion Junior
-
-        //    #region Senior
-
-        //    seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[3].Fall, new List<SuccessObjective>()
-        //    {
-        //        new Course("Software Project 1", "Test description",
-        //        "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+490",
-        //        1, groupProjects, "SE 490", CourseType.ProgramCore),
-        //        new SuccessActivity("Hackathons", "Test description", "", 1, null),
-        //        new SuccessActivity("Corporate Visits", "Test description", "", 1, null)
-        //    });
-
-        //    seMap.addSuccessObjectives(seMap.SuccessCategories[0], seMap.SchoolYears[3].Spring, new List<SuccessObjective>()
-        //    {
-        //        new Course("Software Project 2", "Test description",
-        //        "https://catalog.stcloudstate.edu/Catalog/ViewCatalog.aspx?pageid=viewcatalog&topicgroupid=1964&entitytype=CID&entitycode=SE+491",
-        //        1, groupProjects, "SE 491", CourseType.ProgramCore),
-        //        new SuccessActivity("Hackathons", "Test description", "", 1, null),
-        //        new SuccessActivity("Mock Interview", "Test description", "", 1, null),
-        //        new SuccessActivity("Corporate Visits", "Test description", "", 1, null)
-        //    });
-
-        //    #endregion Senior
-
-        //    #endregion Soft Skills
-
-        //    return seMap;
-        //}
+            //Make sure a student success map was retrieved
+            if (studentSuccessMapTable != null && studentSuccessMapTable.Rows.Count > 0)
+            {
+                StudentSuccessMap successMap = DataInterpreter.getStudentSuccessMap(studentSuccessMapTable.Rows[0]);
+                program.successMap = successMap;
+                return Task.FromResult(successMap);
+            }
+            else
+                return null;
+        }
     }
 }

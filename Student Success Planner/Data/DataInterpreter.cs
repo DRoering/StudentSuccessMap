@@ -39,14 +39,62 @@ namespace Student_Success_Planner.Data
 
         public static SuccessMap getSuccessMap(DataRow data)
         {
-            int ID = (int)data["SMID"];
+            int ID = (int)data["SMID"]; 
             string name = data["SMName"].ToString();
 
             SuccessMap successMap = new SuccessMap(ID, name);
+            populateSuccessMap(ref successMap);
+
+            return successMap;
+        }
+
+        public static StudentSuccessMap getStudentSuccessMap(DataRow studentSuccessPlanData)
+        {
+            string starID = studentSuccessPlanData["StarID"].ToString();
+            int programID = (int)studentSuccessPlanData["PrgmID"];
 
             DatabaseSelect dbSelect = new DatabaseSelect();
+            DataTable successMapTable = dbSelect.SelectSuccessMap(programID);
 
-            DataTable objectiveMappingsTable = dbSelect.SelectSuccessObjMapSuccessMap(ID);
+            //Make sure a success map was retrieved
+            if (successMapTable != null && successMapTable.Rows.Count > 0)
+            {
+                DataRow successMapData = successMapTable.Rows[0];
+
+                int ID = (int)successMapData["SMID"];
+                string name = successMapData["SMName"].ToString();
+
+                //Create student success map
+                SuccessMap successMap = new StudentSuccessMap(ID, name, starID, programID);
+
+                //Populate success map base data
+                populateSuccessMap(ref successMap); //ref does not support polymorphism
+                StudentSuccessMap studentSuccessMap = (StudentSuccessMap)successMap;
+
+                //Populate Student Success Map specific data
+                DataTable completedObjsTable = dbSelect.SelectCompletedObjectives(starID);
+                if (completedObjsTable != null)
+                {
+                    //Add completed objectives to success map
+                    foreach (DataRow completedObjData in completedObjsTable.Rows)
+                    {
+                        string objectiveID = completedObjData["ObjID"].ToString();
+                        studentSuccessMap.addCompletedObjective(objectiveID);
+                    }
+                }
+
+                return studentSuccessMap;
+            }
+            else
+                return null;
+        }
+
+        //Populates the given success map with the required data.
+        private static void populateSuccessMap(ref SuccessMap successMap)
+        {
+            DatabaseSelect dbSelect = new DatabaseSelect();
+
+            DataTable objectiveMappingsTable = dbSelect.SelectSuccessObjMapSuccessMap(successMap.ID);
 
             //The success map has success objectives
             if (objectiveMappingsTable != null && objectiveMappingsTable.Rows.Count > 0)
@@ -160,8 +208,6 @@ namespace Student_Success_Planner.Data
                 //Add classifiers to success map
                 successMap.addSuccessObjectiveClassifiers(classifiers.Values);
             }
-
-            return successMap;
         }
 
         public static SuccessObjective getSuccessObjective(DataRow data, int weight, SuccessObjectiveClassifier classifier)

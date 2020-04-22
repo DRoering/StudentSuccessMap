@@ -44,6 +44,22 @@ namespace Student_Success_Planner.Data
             return Connector.QueryDatabase(Statement);
         }
 
+        //Selects all StudentSuccessMap table information with a StarID and Program
+        public DataTable SelectStudentSuccessMap(string starID, int PID)
+        {
+            Statement = "Select * FROM StudentSuccessMap WHERE StarID = '" + starID + "' AND PrgmID = " + PID;
+
+            return Connector.QueryDatabase(Statement);
+        }
+
+        //Selects all CompletedObjectives with the given StarID
+        public DataTable SelectCompletedObjectives(string starID)
+        {
+            Statement = "Select * FROM CompletedObjective WHERE StarID = '" + starID + "'";
+
+            return Connector.QueryDatabase(Statement);
+        }
+
         //Objective ID to select Objective info
         public DataTable SelectObjective(string OID)
         {
