@@ -52,7 +52,7 @@
 
                 /*Styling applied to the generated label for the progress bar*/
                 .progressBar .ui-progressbar-label {
-                    font-size: 12px;
+                    font-size: 11px;
                 }
 
                 /*Stying applied to the actual bar showing progress that is generated*/
@@ -78,9 +78,7 @@
                 Placeholder="Search..." />
 
             //Search Filters
-            <MatAccordion Style="        margin-top: 5px;
-        margin-bottom: 10px;
-">
+            <MatAccordion Style="margin-top: 5px; margin-bottom: 10px;">
                 <MatExpansionPanel>
                     <MatExpansionPanelSummary>
                         <MatExpansionPanelHeader>Filters</MatExpansionPanelHeader>
@@ -187,8 +185,6 @@
                                 //Display student's progress in the success category
                                 if (successMap.tryGetSuccessCategoryProgress(successCategory, out float categoryProgress))
                                 {
-                                    //<p style="margin-top: 10px;">@categoryProgress.ToString("0.00") % </p>
-                                    //<MatProgressBar Progress="@(categoryProgress / 100)" Class="progressBar categoryProgressBar" Style="margin-bottom: 5px;"></MatProgressBar>
                                     <RadzenProgressBar Value="@((int)categoryProgress)" class="progressBar categoryProgressBar" />
                                 }
                             }
