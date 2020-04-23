@@ -9,10 +9,25 @@
     <Authorized>
         <h5>@breadcrumbService.selectedProgram.getName() Student Success Map</h5>
 
+        <style>
+            .progressBar {
+                margin-top: 5px;
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+
+            /*Stying applied to the actual bar showing progress that is generated*/
+            .progressBar .ui-progressbar-value:before {
+                background-color: #85a1b3;
+            }
+            .progressBar .ui-progressbar-value:after {
+                background-color: #85a1b3;
+            }
+        </style>
+
         @if (successMap == null)
         {
-            //<MatProgressBar Indeterminate="true"></MatProgressBar>
-            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="progressBar" />
         }
         else
         {
@@ -37,12 +52,6 @@
                     text-align: center;
                     border-collapse: separate;
                     border-spacing: 0px 2px;
-                }
-
-                .progressBar {
-                    margin-top: 5px;
-                    margin-bottom: 10px;
-                    font-weight: bold;
                 }
 
                 .categoryProgressBar {
