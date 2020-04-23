@@ -93,18 +93,6 @@ namespace Student_Success_Planner.Data
             allSuccessObjectives = new List<SuccessObjective>();
         }
 
-        public SuccessMap(int ID, string name, ICollection<SuccessCategory> successCategories, ICollection<SchoolYear> schoolYears,
-            ICollection<SuccessObjectiveClassifier> objectiveClassifiers)
-        {
-            this.ID = ID;
-            Name = name;
-            this.successCategories = new List<SuccessCategory>(successCategories);
-            this.schoolYears = new List<SchoolYear>(schoolYears);
-            this.objectiveClassifiers = new List<SuccessObjectiveClassifier>(objectiveClassifiers);
-            successObjectives = new Dictionary<Tuple<SuccessCategory, Semester>, List<SuccessObjective>>();
-            allSuccessObjectives = new List<SuccessObjective>();
-        }
-
         #region Success Categories
 
         /// <summary>
@@ -260,6 +248,38 @@ namespace Student_Success_Planner.Data
                 if (successObjectives.ContainsKey(key))
                 {
                     objectives = successObjectives[key].ToArray();
+                    return true;
+                }
+            }
+
+            objectives = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Tries to get the success objectives for a given Success Category.
+        /// </summary>
+        /// <param name="successCategory">Success category to search.</param>
+        /// <param name="objectives">Success objectives found in the search.</param>
+        /// <returns>True if success objectives are found, false otherwise.</returns>
+        public bool tryGetSuccessObjectivesByCategory(SuccessCategory successCategory, out SuccessObjective[] objectives)
+        {
+            if (successCategory != null)
+            {
+                //Objectives found in search
+                List<SuccessObjective> results = new List<SuccessObjective>();
+
+                foreach (KeyValuePair<Tuple<SuccessCategory, Semester>, List<SuccessObjective>> objectiveCell in successObjectives)
+                {
+                    //Objective cell pertains to the category being searched
+                    if (objectiveCell.Key.Item1 == successCategory)
+                        results.AddRange(objectiveCell.Value);
+                }
+
+                //Found at least one objective
+                if (results.Count > 0)
+                {
+                    objectives = results.ToArray();
                     return true;
                 }
             }

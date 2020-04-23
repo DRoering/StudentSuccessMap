@@ -8,7 +8,7 @@
 
 @if (successMap == null)
 {
-    <p><em>Loading...</em></p>
+<RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" class="progressBar" />
 }
 else
 {
@@ -33,6 +33,19 @@ else
             text-align: center;
             border-collapse: separate;
             border-spacing: 0px 2px;
+        }
+
+        .progressBar {
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        /*Stying applied to the actual bar showing progress that is generated*/
+        .progressBar .ui-progressbar-value:before {
+            background-color: #85a1b3;
+        }
+        .progressBar .ui-progressbar-value:after {
+            background-color: #85a1b3;
         }
 
         @yearColumnsCSS
