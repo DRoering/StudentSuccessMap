@@ -132,5 +132,20 @@ namespace Student_Success_Planner.Data
             return Connector.QueryDatabase(Statement);
         }
 
+        //Select all Unique StarIDs
+        public DataTable SelectStarID()
+        {
+            Statement = "Select DISTINCT StarID FROM StudentSuccessMap";
+
+            return Connector.QueryDatabase(Statement);
+        }
+
+        //Select all PrgmIDs tied to a StarID
+        public DataTable SelectStudentPrograms(string starID)
+        {
+            Statement = "Select * FROM StudentSuccessMap WHERE StarID = '" + starID + "'";
+
+            return Connector.QueryDatabase(Statement);
+        }
     }
 }
