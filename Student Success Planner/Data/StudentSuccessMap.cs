@@ -18,7 +18,7 @@ namespace Student_Success_Planner.Data
         public int ProgramID { get; }
 
         /// <summary>
-        /// Student's progress in completing all the required Success Objectives in the Success Map.
+        /// Student's progress in completing all the required Success Objectives in the Success Map as a percentage between 0 and 100.
         /// </summary>
         public float Progress
         {
@@ -62,10 +62,10 @@ namespace Student_Success_Planner.Data
         }
 
         /// <summary>
-        /// Tries to get the student's progress in the given success category.
+        /// Tries to get the student's progress in the given success category as a percentage between 0 and 100.
         /// </summary>
         /// <param name="category">Success category to get the progress for.</param>
-        /// <param name="progress">Progress in the success category as a percentage.</param>
+        /// <param name="progress">Progress in the success category as a percentage between 0 and 100.</param>
         /// <returns>True if the category was found in this success map, false otherwise.</returns>
         public bool tryGetSuccessCategoryProgress(SuccessCategory category, out float progress)
         {

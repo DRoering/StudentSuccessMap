@@ -34,7 +34,22 @@ else
         </BreadcrumbItem>
     </Breadcrumb>
 
-    <SuccessMap></SuccessMap>
+    //Change which success map is being viewed depending on if the user is authenticated.
+    <AuthorizeView>
+        <Authorized>
+            <!--Would need something like this to handle student vs. admin view-->
+            @*@context.User.IsInRole("student");
+            @context.User.IsInRole("admin");*@
+            @{ 
+                //Parse StarID from the username
+                string starID = @context.User.Identity.Name.Split('@')[0];
+            }
+            <StudentSuccessMap StarID="@starID"></StudentSuccessMap>
+        </Authorized>
+        <NotAuthorized>
+            <SuccessMap></SuccessMap>
+        </NotAuthorized>
+    </AuthorizeView>
 }
 
 @code {

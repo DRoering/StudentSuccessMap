@@ -1,0 +1,446 @@
+﻿@using Student_Success_Planner.Data
+@using Radzen
+@inject SuccessMapService successMapService
+@inject SuccessMapSearchService searchService
+@inject BreadcrumbService breadcrumbService
+@inject NavigationManager navigationManager
+
+<AuthorizeView>
+    <Authorized>
+        <h5>@breadcrumbService.selectedProgram.getName() Student Success Map</h5>
+
+        @if (successMap == null)
+        {
+            //<MatProgressBar Indeterminate="true"></MatProgressBar>
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+        }
+        else
+        {
+            <style>
+                .layoutCell {
+                    border: 1px solid white;
+                }
+
+                .labelCell {
+                    text-align: center;
+                }
+
+                .successObjectivesTable {
+                    width: 100%;
+                    text-align: center;
+                    border-collapse: separate;
+                    border-spacing: 0px 2px;
+                }
+
+                .successObjectiveLegendTable {
+                    width: 100%;
+                    text-align: center;
+                    border-collapse: separate;
+                    border-spacing: 0px 2px;
+                }
+
+                .progressBar {
+                    margin-top: 5px;
+                    margin-bottom: 10px;
+                    font-weight: bold;
+                }
+
+                .categoryProgressBar {
+                    width: 80%;
+                    margin: 5px auto;
+                }
+
+                /*Styling applied to the generated label for the progress bar*/
+                .progressBar .ui-progressbar-label {
+                    font-size: 12px;
+                }
+
+                /*Stying applied to the actual bar showing progress that is generated*/
+                .progressBar .ui-progressbar-value {
+                    background-color: #85a1b3;
+                }
+
+                @yearColumnsCSS
+
+                @categoryLabelCSS
+            </style>
+
+            //Show progress in success map
+            <RadzenProgressBar Value="@((int)successMap.Progress)" class="progressBar" />
+
+            //Search bar
+            <Blazorise.Components.Autocomplete Data="@relevantSuccessObjectives"
+                TextField="@((objective) => objective.Name)"
+                ValueField="@((objective) => objective.Name)"
+                SelectedValue="@Search"
+                SelectedValueChanged="@handleSearchChanged"
+                Filter="@Blazorise.Components.AutocompleteFilter.Contains"
+                Placeholder="Search..." />
+
+            //Search Filters
+            <MatAccordion Style="        margin-top: 5px;
+        margin-bottom: 10px;
+">
+                <MatExpansionPanel>
+                    <MatExpansionPanelSummary>
+                        <MatExpansionPanelHeader>Filters</MatExpansionPanelHeader>
+                    </MatExpansionPanelSummary>
+                    <MatExpansionPanelDetails>
+                        <MatSelect Label="Success Objective Type" Outlined="false" Style="display:inline-block"
+                                   TValue="string" Value="TypeFilter" ValueChanged="handleTypeFilterChanged">
+                            <MatOptionString Value="@SuccessMapSearchFilters.ALL">@SuccessMapSearchFilters.ALL</MatOptionString>
+                            <MatOptionString Value="@SuccessMapSearchFilters.GOAL_AREAS">@SuccessMapSearchFilters.GOAL_AREAS</MatOptionString>
+                            <MatOptionString Value="@SuccessMapSearchFilters.PROGRAM_CORE">@SuccessMapSearchFilters.PROGRAM_CORE</MatOptionString>
+                            <MatOptionString Value="@SuccessMapSearchFilters.ELECTIVES">@SuccessMapSearchFilters.ELECTIVES</MatOptionString>
+                            <MatOptionString Value="@SuccessMapSearchFilters.SUCCESS_ACTIVITIES">@SuccessMapSearchFilters.SUCCESS_ACTIVITIES</MatOptionString>
+                        </MatSelect>
+                        <MatSelect Label="Success Objective Classifier" Outlined="false" Style="display: inline-block"
+                                   TValue="string" Value="ClassifierFilter" ValueChanged="handleClassifierFilterChanged">
+                            <MatOptionString Value="@SuccessMapSearchFilters.ALL">@SuccessMapSearchFilters.ALL</MatOptionString>
+
+                            <!--Display Option for each Objective Classifer-->
+                            @foreach (SuccessObjectiveClassifier classifier in successMap.ObjectiveClassifiers)
+                            {
+                                <MatOptionString Value="@classifier.Classifier">@classifier.Classifier</MatOptionString>
+                            }
+                        </MatSelect>
+                    </MatExpansionPanelDetails>
+                </MatExpansionPanel>
+            </MatAccordion>
+
+            //Success Map Display
+            <table class="layoutCell">
+                <!--Legend-->
+                <tr>
+                    <th style="width: @(categoryColumnWidth + "%")">
+                        <!--Legend-->
+                        <table class="successObjectiveLegendTable layoutCell">
+                            <tr class="successObjective">
+                                <td class="course goalArea">
+                                    <!--Width of semester column-->
+                                    Goal Area Course
+                                </td>
+                            </tr>
+                            <tr class="successObjective">
+                                <td class="course majorCore">
+                                    Program Core Course
+                                </td>
+                            </tr>
+                            <tr class="successObjective">
+                                <td class="course elective">
+                                    Elective Course
+                                </td>
+                            </tr>
+                            <tr class="successObjective">
+                                <td class="successActivity">
+                                    Success Activity
+                                </td>
+                            </tr>
+                        </table>
+                    </th>
+                    <!--School Year Column Headers-->
+                    @for (int i = 0; i < successMap.SchoolYears.Length; i++)
+                    {
+                        <th colspan="3" class="labelCell @("schoolYear" + i) layoutCell" style="width: @(yearColumnWidth + "%")">
+                            Year @(successMap.SchoolYears[i].Year) <br />
+                            @successMap.SchoolYears[i].StudentClass
+                        </th>
+                    }
+                </tr>
+
+                <!--Semester Column Headers-->
+                <tr>
+                    <th></th> <!--Spacer-->
+                    @for (int i = 0; i < successMap.SchoolYears.Length; i++)
+                    {
+                        <th class="labelCell @("schoolYear" + i) layoutCell">
+                            @if (successMap.SchoolYears[i].Fall != null)
+                                @successMap.SchoolYears[i].Fall.Name
+                                else
+                                    @("Fall")
+                        </th>
+                        <th class="labelCell @("schoolYear" + i) layoutCell">
+                            @if (successMap.SchoolYears[i].Spring != null)
+                                @successMap.SchoolYears[i].Spring.Name
+                                else
+                                    @("Spring")
+                        </th>
+                        <th class="labelCell @("schoolYear" + i) layoutCell">
+                            @if (successMap.SchoolYears[i].Summer != null)
+                                @successMap.SchoolYears[i].Summer.Name
+                                else
+                                    @("Summer")
+                        </th>
+                    }
+                </tr>
+
+                <!--Success Category rows-->
+                @for (int i = 0; i < successMap.SuccessCategories.Length; i++)
+                {
+                    SuccessCategory successCategory = successMap.SuccessCategories[i];
+                    <tr>
+                        <!--Success Category Label-->
+                        <th class="labelCell @("successCategoryLabel" + i) layoutCell">
+                            @successCategory.Name
+
+                            @{
+                                //Display student's progress in the success category
+                                if (successMap.tryGetSuccessCategoryProgress(successCategory, out float categoryProgress))
+                                {
+                                    //<p style="margin-top: 10px;">@categoryProgress.ToString("0.00") % </p>
+                                    //<MatProgressBar Progress="@(categoryProgress / 100)" Class="progressBar categoryProgressBar" Style="margin-bottom: 5px;"></MatProgressBar>
+                                    <RadzenProgressBar Value="@((int)categoryProgress)" class="progressBar categoryProgressBar" />
+                                }
+                            }
+                        </th>
+
+                        <!--Success objectives in successCategory-->
+                        @for (int j = 0; j < successMap.SchoolYears.Length; j++)
+                        {
+                            SchoolYear schoolYear = successMap.SchoolYears[j];
+                            @for (int k = 0; k < schoolYear.Semesters.Length; k++)
+                            {
+                                Semester semester = schoolYear.Semesters[k];
+                                <td class="@("schoolYear" + j) layoutCell">
+                                    @if (successMap.tryGetSuccessObjectives(successCategory, semester,
+                                     out Student_Success_Planner.Data.SuccessObjective[] successObjectives))
+                                    {
+                                        //Only display objectives relevant to the search criteria
+                                        Student_Success_Planner.Data.SuccessObjective[] objectivesToDisplay =
+                                            Array.FindAll(successObjectives, objective => relevantSuccessObjectives.Contains(objective));
+
+                                        <table class="successObjectivesTable">
+                                            @foreach (Student_Success_Planner.Data.SuccessObjective objective in objectivesToDisplay)
+                                            {
+                                                //Determine the objective's completion state
+                                                StudentSuccessObjective.SuccessObjectiveState objectiveState;
+                                                if (successMap.isCompleted(objective))
+                                                    objectiveState = StudentSuccessObjective.SuccessObjectiveState.Complete;
+                                                else
+                                                    objectiveState = StudentSuccessObjective.SuccessObjectiveState.Incomplete;
+
+                                                <StudentSuccessObjective objectiveState="@objectiveState" successObjective="objective"></StudentSuccessObjective>
+                                            }
+                                        </table>
+                                    }
+                                </td>
+                            }
+                        }
+                    </tr>
+                }
+            </table>
+        }
+
+        @code {
+            private Student_Success_Planner.Data.StudentSuccessMap successMap;
+
+            /// <summary>
+            /// StarID of the student this success map belongs too.
+            /// </summary>
+            [Parameter]
+            public string StarID { get; set; }
+
+            #region Dynamic Styling
+
+            /// <summary>
+            /// Width of the success category column width as a percentage.
+            /// </summary>
+            private const float categoryColumnWidth = 10f;
+
+            /// <summary>
+            /// Returns the width of the year column based on the number of years contained in the success map.
+            /// </summary>
+            private float yearColumnWidth
+            {
+                get
+                {
+                    float width = 0f;
+
+                    if (successMap != null)
+                    {
+                        //Determine how much space is left after the categoryColumnWidth is accounted for
+                        width = (100f - categoryColumnWidth) / successMap.SchoolYears.Length;
+
+                        //Make sure size is above minimum size
+                        if (width < minYearColumnWidth)
+                            return minYearColumnWidth;
+                    }
+
+                    return width;
+                }
+            }
+            private const float minYearColumnWidth = 17f;
+
+            /// <summary>
+            /// Returns a css class for each school year.
+            /// </summary>
+            private string yearColumnsCSS
+            {
+                get
+                {
+                    string css = "";
+
+                    if (successMap != null)
+                    {
+                        float baseOpacity = 1f / successMap.SchoolYears.Length;
+                        for (int i = 0; i < successMap.SchoolYears.Length; i++)
+                        {
+                            //Evenly increase the opacity
+                            float opacity = baseOpacity * (i + 1);
+                            css += ".schoolYear" + i + " { " +
+                                "background-color: rgba(" +
+                                    baseYearColumnColor.R + "," +
+                                    baseYearColumnColor.G + "," +
+                                    baseYearColumnColor.B + "," +
+                                    opacity +
+                                ");" +
+                            "}";
+                        }
+                    }
+                    else
+                    {
+                        //Create empty css classes
+                        for (int i = 0; i < successMap.SchoolYears.Length; i++)
+                        {
+                            css += ".schoolYear" + i + " { }";
+                        }
+                    }
+
+                    return css;
+                }
+            }
+
+            /// <summary>
+            /// Base color the year column colors are derived from.
+            /// </summary>
+            private System.Drawing.Color baseYearColumnColor { get; } = System.Drawing.Color.FromArgb(1, 144, 144, 144);
+
+            /// <summary>
+            /// Returns a css class for each success category label.
+            /// </summary>
+            private string categoryLabelCSS
+            {
+                get
+                {
+                    string css = "";
+
+                    if (successMap != null)
+                    {
+                        float baseOpacity = 1f / successMap.SuccessCategories.Length;
+                        for (int i = 0; i < successMap.SuccessCategories.Length; i++)
+                        {
+                            //Evenly decrease the opacity
+                            float opacity = baseOpacity * (successMap.SuccessCategories.Length - i);
+                            css += ".successCategoryLabel" + i + " { " +
+                                "background-color: rgba(" +
+                                    baseSuccessCategoryColor.R + "," +
+                                    baseSuccessCategoryColor.G + "," +
+                                    baseSuccessCategoryColor.B + "," +
+                                    opacity +
+                                ");" +
+                                "font-size: 12px;" +
+                            "}";
+                        }
+                    }
+                    else
+                    {
+                        //Create empty css classes
+                        for (int i = 0; i < successMap.SuccessCategories.Length; i++)
+                        {
+                            css += ".successCategoryLabel" + i + " { }";
+                        }
+                    }
+
+                    return css;
+                }
+            }
+
+            /// <summary>
+            /// Base color the success category colors are derived from.
+            /// </summary>
+            private System.Drawing.Color baseSuccessCategoryColor { get; } = System.Drawing.Color.FromArgb(1, 0, 153, 255);
+
+            #endregion Dynamic Styling
+
+            #region Search
+
+            /// <summary>
+            /// Current value of the search.
+            /// </summary>
+            private string Search { get; set; } = "";
+
+            /// <summary>
+            /// Current search filter value for success objective type.
+            /// </summary>
+            private string TypeFilter { get; set; } = SuccessMapSearchFilters.ALL;
+
+            /// <summary>
+            /// Current search filter value for success objective classifier.
+            /// </summary>
+            private string ClassifierFilter { get; set; } = SuccessMapSearchFilters.ALL;
+
+            /// <summary>
+            /// Success objectives relevant to the search criteria.
+            /// </summary>
+            private Student_Success_Planner.Data.SuccessObjective[] relevantSuccessObjectives { get; set; }
+
+            /// <summary>
+            /// Gets success objectives relevant to the search criteria.
+            /// </summary>
+            private void getSuccessObjectives()
+            {
+                relevantSuccessObjectives = searchService.getRelevantSuccessObjectives(successMap);
+            }
+
+            /// <summary>
+            /// Handles the event of the search value changing.
+            /// </summary>
+            /// <param name="newValue"></param>
+            private void handleSearchChanged(object newValue)
+            {
+                Search = (string)newValue;
+                searchService.onSearchChanged(Search);
+
+                //Update relevant success objectives based on new search value
+                getSuccessObjectives();
+            }
+
+            private void handleTypeFilterChanged(string newFilter)
+            {
+                TypeFilter = newFilter;
+                searchService.onSearchTypeFilterChanged(newFilter);
+
+                //Update relevant success objectives based on new search value
+                getSuccessObjectives();
+            }
+
+            private void handleClassifierFilterChanged(string newFilter)
+            {
+                ClassifierFilter = newFilter;
+                searchService.onSearchClassifierFilterChanged(newFilter);
+
+                //Update relevant success objectives based on new search value
+                getSuccessObjectives();
+            }
+
+            #endregion Search
+
+            protected override async Task OnInitializedAsync()
+            {
+                try
+                {
+                    successMap = await successMapService.getStudentSuccessMapAsync(StarID, breadcrumbService.selectedProgram);
+
+                    getSuccessObjectives();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
+    </Authorized>
+    <NotAuthorized>
+        You need to log in to view a student success map.
+    </NotAuthorized>
+</AuthorizeView>

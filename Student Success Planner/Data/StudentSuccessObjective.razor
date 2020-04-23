@@ -1,0 +1,110 @@
+﻿@using Student_Success_Planner.Data
+
+@if (successObjective != null)
+{
+    <style>
+        tr {
+            vertical-align: top;
+        }
+
+        .objectiveIcon {
+            vertical-align: central;
+            float: left;
+        }
+
+        .objectiveName {
+            vertical-align: central;
+        }
+    </style>
+
+    <tr class="successObjective">
+        <!--Need to change display based on type of success objective-->
+        @if (successObjective is Course)
+        {
+            Course course = (Course)successObjective;
+
+            //Display differently based on Course type
+            @switch (course.Type)
+            {
+                case (CourseType.GoalArea):
+                    <td class="course goalArea">
+                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
+                        <span class="objectiveName">@course.CourseID</span>
+                    </td>
+                    break;
+                case (CourseType.ProgramCore):
+                    <td class="course majorCore">
+                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
+                        <span class="objectiveName">@course.CourseID</span>
+                    </td>
+                    break;
+                case (CourseType.Elective):
+                    <td class="course elective">
+                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
+                        <span class="objectiveName">@course.CourseID</span>
+                    </td>
+                    break;
+                default:
+                    <td class="course">
+                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
+                        <span class="objectiveName">@course.CourseID</span>
+                    </td>
+                    break;
+            }
+        }
+        else if (successObjective is SuccessActivity)
+        {
+            <td class="successActivity">
+                <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
+                <span class="objectiveName">@successObjective.Name</span>
+            </td>
+        }
+        else //Default to name if type cannot be determined by previous checks
+        {
+            <td>
+                @successObjective.Name
+            </td>
+        }
+    </tr>
+}
+
+@code {
+    [Parameter]
+    public Student_Success_Planner.Data.SuccessObjective successObjective { get; set; }
+
+    [Parameter]
+    public SuccessObjectiveState objectiveState { get; set; }
+
+    /// <summary>
+    /// Indicates a state of completion of the success objective.
+    /// </summary>
+    public enum SuccessObjectiveState
+    {
+        Complete,
+        InProgress,
+        Incomplete
+    }
+
+    /// <summary>
+    /// Name of the icon to be displayed with this objective. 
+    /// Determined based on the state of the objective.
+    /// Available icon names found here: https://www.matblazor.com/Icon
+    /// </summary>
+    private string objectiveIcon
+    {
+        get
+        {
+            switch(objectiveState)
+            {
+                case SuccessObjectiveState.Incomplete:
+                    return "check_box_outline_blank";
+                case SuccessObjectiveState.InProgress:
+                    return "indeterminate_check_box";
+                case SuccessObjectiveState.Complete:
+                    return "check_box";
+                default:
+                    return "check_box_outline_blank";
+            }
+        }
+    }
+}
