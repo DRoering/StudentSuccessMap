@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-using MySql.Data;
 using MySql.Data.MySqlClient;
 
 namespace Student_Success_Planner.Data
