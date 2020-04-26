@@ -3,7 +3,6 @@
 @using Student_Success_Planner.Data
 @inject BreadcrumbService breadcrumbService
 @inject NavigationManager navigationManager
-
 @if (!canLoadSuccessMap)
 {
     //Need try catch block to avoid exception sometimes thrown during this method call
@@ -39,12 +38,12 @@ else
         <Authorized>
             <!--Would need something like this to handle student vs. admin view-->
             @*@context.User.IsInRole("student");
-            @context.User.IsInRole("admin");*@
-            @{ 
+                @context.User.IsInRole("admin");*@
+            @{
                 //Parse StarID from the username
                 string starID = @context.User.Identity.Name.Split('@')[0];
             }
-            <StudentSuccessMap StarID="@starID"></StudentSuccessMap>
+            <StudentSuccessMap StarID="xh7102oj"></StudentSuccessMap>
         </Authorized>
         <NotAuthorized>
             <SuccessMap></SuccessMap>

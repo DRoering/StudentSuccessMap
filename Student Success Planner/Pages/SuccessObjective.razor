@@ -1,4 +1,7 @@
 ﻿@using Student_Success_Planner.Data
+@using Radzen.Blazor;
+@using MatBlazor;
+@inject DialogService dialogService
 
 @if (successObjective != null)
 {
@@ -18,25 +21,62 @@
             @switch (course.Type)
             {
                 case (CourseType.GoalArea):
-                    <td class="course goalArea">
-                        @course.CourseID
-                    </td>
+        <td class="course goalArea">
+            @course.CourseID
+            
+
+        </td>
                     break;
                 case (CourseType.ProgramCore):
-                    <td class="course majorCore">
-                        @course.CourseID
-                    </td>
+    <td class="course majorCore">
+        @course.CourseID
+        <MatButton OnClick="@OpenDialog" Raised="true">@course.CourseID</MatButton>
+        <MatDialog @bind-IsOpen="@dialogIsOpen">
+            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+            <MatDialogContent>
+                <p>Course Description: </p>
+            </MatDialogContent>
+            <MatDialogActions>
+                <MatButton OnClick="@(e => { dialogIsOpen = false; })">No Thanks</MatButton>
+                <MatButton OnClick="@OkClick">OK</MatButton>
+            </MatDialogActions>
+        </MatDialog>
+    </td>
                     break;
                 case (CourseType.Elective):
-                    <td class="course elective">
-                        @course.CourseID
-                    </td>
+    <td class="course elective">
+        @course.CourseID
+        <MatButton OnClick="@OpenDialog" Raised="true">@course.CourseID</MatButton>
+        <MatDialog @bind-IsOpen="@dialogIsOpen">
+            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+            <MatDialogContent>
+                <p>Course Description: </p>
+            </MatDialogContent>
+            <MatDialogActions>
+                <MatButton OnClick="@(e => { dialogIsOpen = false; })">No Thanks</MatButton>
+                <MatButton OnClick="@OkClick">OK</MatButton>
+            </MatDialogActions>
+        </MatDialog>
+    </td>
                     break;
                 default:
-                    <td class="course">
-                        @course.CourseID
-                    </td>
+    <td class="course">
+        @course.CourseID
+        <MatButton OnClick="@OpenDialog" Raised="true">@course.CourseID</MatButton>
+        <MatDialog @bind-IsOpen="@dialogIsOpen">
+            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+            <MatDialogContent>
+                <p>Course Description: </p>
+            </MatDialogContent>
+            <MatDialogActions>
+                <MatButton OnClick="@(e => { dialogIsOpen = false; })">No Thanks</MatButton>
+                <MatButton OnClick="@OkClick">OK</MatButton>
+            </MatDialogActions>
+        </MatDialog>
+    </td>
                     break;
+                    <RadzenDialog />
+
             }
         }
         else if (successObjective is SuccessActivity)
@@ -57,4 +97,16 @@
 @code {
     [Parameter]
     public Student_Success_Planner.Data.SuccessObjective successObjective { get; set; }
+
+    bool dialogIsOpen = false;
+
+    void OpenDialog()
+    {
+        dialogIsOpen = true;
+    }
+
+    void OkClick()
+    {
+        dialogIsOpen = false;
+    }
 }

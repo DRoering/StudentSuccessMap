@@ -16,7 +16,7 @@
             vertical-align: central;
         }
     </style>
-
+   
     <tr class="successObjective">
         <!--Need to change display based on type of success objective-->
         @if (successObjective is Course)
@@ -29,25 +29,72 @@
                 case (CourseType.GoalArea):
                     <td class="course goalArea">
                         <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
-                        <span class="objectiveName">@course.CourseID</span>
+                        <MatButton Dense="true" OnClick="@OpenDialog" >@course.CourseID</MatButton>
+                        <MatDialog @bind-IsOpen="@dialogIsOpen">
+                            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+                            <MatDialogContent>
+                                <p>Course Description: @successObjective.Description</p>
+                                <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
+                                <p>Weight: @successObjective.Weight</p>
+                            </MatDialogContent>
+                            <MatDialogActions>
+                                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                            </MatDialogActions>
+                        </MatDialog>
                     </td>
                     break;
                 case (CourseType.ProgramCore):
                     <td class="course majorCore">
                         <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
-                        <span class="objectiveName">@course.CourseID</span>
+                        <MatButton Dense="true" OnClick="@OpenDialog" >@course.CourseID</MatButton>
+                        <MatDialog @bind-IsOpen="@dialogIsOpen">
+                            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+                            <MatDialogContent>
+                                <p>Course Description: @successObjective.Description</p>
+                                <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
+                                <p>Weight: @successObjective.Weight</p>
+                            </MatDialogContent>
+                            <MatDialogActions>
+                                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                            </MatDialogActions>
+                        </MatDialog>
                     </td>
                     break;
                 case (CourseType.Elective):
                     <td class="course elective">
                         <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
-                        <span class="objectiveName">@course.CourseID</span>
+                        <MatButton Dense="true" OnClick="@OpenDialog" Color ="Grey">@course.CourseID</MatButton>
+                        <MatDialog @bind-IsOpen="@dialogIsOpen">
+                            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+                            <MatDialogContent>
+                                <p>Course Description: @successObjective.Description</p>
+                                <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
+                                <p>Weight: @successObjective.Weight</p>
+                            </MatDialogContent>
+                            <MatDialogActions>
+                                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                            </MatDialogActions>
+                        </MatDialog>
                     </td>
                     break;
                 default:
                     <td class="course">
-                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
-                        <span class="objectiveName">@course.CourseID</span>
+                        
+                            <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
+                            <MatButton  Dense="true" OnClick="@OpenDialog" Color="Grey">@course.CourseID</MatButton>
+                        
+                        <MatDialog @bind-IsOpen="@dialogIsOpen">
+                            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+                            <MatDialogContent>
+                                <p>Course Description: @successObjective.Description</p>
+                                <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
+                                <p>Weight: @successObjective.Weight</p>
+                            </MatDialogContent>
+                            <MatDialogActions>
+                                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                            </MatDialogActions>
+                        </MatDialog>
+
                     </td>
                     break;
             }
@@ -56,7 +103,18 @@
         {
             <td class="successActivity">
                 <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
-                <span class="objectiveName">@successObjective.Name</span>
+                <MatButton Dense="true" OnClick="@OpenDialog" Color="white">@successObjective.Name</MatButton>
+                <MatDialog @bind-IsOpen="@dialogIsOpen">
+                    <MatDialogTitle>Course ID: @successObjective.Name</MatDialogTitle>
+                    <MatDialogContent>
+                        <p>Course Description: @successObjective.Description</p>
+                        <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
+                        <p>Weight: @successObjective.Weight</p>
+                    </MatDialogContent>
+                    <MatDialogActions>
+                        <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                    </MatDialogActions>
+                </MatDialog>
             </td>
         }
         else //Default to name if type cannot be determined by previous checks
@@ -86,7 +144,7 @@
     }
 
     /// <summary>
-    /// Name of the icon to be displayed with this objective. 
+    /// Name of the icon to be displayed with this objective.
     /// Determined based on the state of the objective.
     /// Available icon names found here: https://www.matblazor.com/Icon
     /// </summary>
@@ -94,7 +152,7 @@
     {
         get
         {
-            switch(objectiveState)
+            switch (objectiveState)
             {
                 case SuccessObjectiveState.Incomplete:
                     return "check_box_outline_blank";
@@ -107,4 +165,22 @@
             }
         }
     }
+
+    bool dialogIsOpen = false;
+
+    void OpenDialog()
+    {
+        dialogIsOpen = true;
+    }
+
+    void OkClick()
+    {
+        dialogIsOpen = false;
+    }
+
+    MatTheme theme = new MatTheme()
+    {
+        Primary = MatThemeColors.Grey._500.Value,
+        Secondary = MatThemeColors.BlueGrey._500.Value
+    };
 }
