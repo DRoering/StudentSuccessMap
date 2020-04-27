@@ -1,7 +1,5 @@
 ﻿@using Student_Success_Planner.Data
-@using Radzen.Blazor;
-@using MatBlazor;
-@inject DialogService dialogService
+
 
 @if (successObjective != null)
 {
@@ -11,7 +9,7 @@
         }
     </style>
 
-    <tr class="successObjective">
+    <tr class="successObjective" @onclick="(() => { dialogIsOpen = true; })">
         <!--Need to change display based on type of success objective-->
         @if (successObjective is Course)
         {
@@ -21,59 +19,64 @@
             @switch (course.Type)
             {
                 case (CourseType.GoalArea):
-        <td class="course goalArea">
-            @course.CourseID
-            
+                    <td class="course goalArea">
+                        @course.CourseID
 
-        </td>
+
+                    </td>
                     break;
                 case (CourseType.ProgramCore):
-    <td class="course majorCore">
-        @course.CourseID
-        <MatButton OnClick="@OpenDialog" Raised="true">@course.CourseID</MatButton>
-        <MatDialog @bind-IsOpen="@dialogIsOpen">
-            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
-            <MatDialogContent>
-                <p>Course Description: </p>
-            </MatDialogContent>
-            <MatDialogActions>
-                <MatButton OnClick="@(e => { dialogIsOpen = false; })">No Thanks</MatButton>
-                <MatButton OnClick="@OkClick">OK</MatButton>
-            </MatDialogActions>
-        </MatDialog>
-    </td>
+                    <td class="course goalArea">
+                        <span class="objectiveName">@course.CourseID</span>
+                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
+                        <MatDialog @bind-IsOpen="@dialogIsOpen">
+                            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+                            <MatDialogContent>
+                                <p>Course Description: @successObjective.Description</p>
+                                <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
+                                <p>Course Weight: @successObjective.Weight</p>
+                            </MatDialogContent>
+                            <MatDialogActions>
+                                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                            </MatDialogActions>
+                        </MatDialog>
+                    </td>
                     break;
                 case (CourseType.Elective):
-    <td class="course elective">
-        @course.CourseID
-        <MatButton OnClick="@OpenDialog" Raised="true">@course.CourseID</MatButton>
-        <MatDialog @bind-IsOpen="@dialogIsOpen">
-            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
-            <MatDialogContent>
-                <p>Course Description: </p>
-            </MatDialogContent>
-            <MatDialogActions>
-                <MatButton OnClick="@(e => { dialogIsOpen = false; })">No Thanks</MatButton>
-                <MatButton OnClick="@OkClick">OK</MatButton>
-            </MatDialogActions>
-        </MatDialog>
-    </td>
+                    <td class="course elective">
+                        <span class="objectiveName">@course.CourseID</span>
+                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
+                        <MatDialog @bind-IsOpen="@dialogIsOpen">
+                            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+                            <MatDialogContent>
+                                <p>Course Description: @successObjective.Description</p>
+                                <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
+                                <p> Course Weight: @successObjective.Weight</p>
+                            </MatDialogContent>
+                            <MatDialogActions>
+                                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                            </MatDialogActions>
+                        </MatDialog>
+                    </td>
                     break;
                 default:
-    <td class="course">
-        @course.CourseID
-        <MatButton OnClick="@OpenDialog" Raised="true">@course.CourseID</MatButton>
-        <MatDialog @bind-IsOpen="@dialogIsOpen">
-            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
-            <MatDialogContent>
-                <p>Course Description: </p>
-            </MatDialogContent>
-            <MatDialogActions>
-                <MatButton OnClick="@(e => { dialogIsOpen = false; })">No Thanks</MatButton>
-                <MatButton OnClick="@OkClick">OK</MatButton>
-            </MatDialogActions>
-        </MatDialog>
-    </td>
+                    <td class="course">
+                        <span class="objectiveName">@course.CourseID</span>
+                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
+
+                        <MatDialog @bind-IsOpen="@dialogIsOpen">
+                            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+                            <MatDialogContent>
+                                <p>Course Description: @successObjective.Description</p>
+                                <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
+                                <p>Course Weight: @successObjective.Weight</p>
+                            </MatDialogContent>
+                            <MatDialogActions>
+                                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                            </MatDialogActions>
+                        </MatDialog>
+
+                    </td>
                     break;
                     <RadzenDialog />
 
@@ -81,9 +84,21 @@
         }
         else if (successObjective is SuccessActivity)
         {
-            <td class="successActivity">
-                @successObjective.Name
-            </td>
+    <td class="successActivity">
+        <span class="objectiveName">@successObjective.Name</span>
+        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
+        <MatDialog @bind-IsOpen="@dialogIsOpen">
+            <MatDialogTitle>Course ID: @successObjective.Name</MatDialogTitle>
+            <MatDialogContent>
+                <p>Course Description: @successObjective.Description</p>
+                <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
+                <p>Weight: @successObjective.Weight</p>
+            </MatDialogContent>
+            <MatDialogActions>
+                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+            </MatDialogActions>
+        </MatDialog>
+    </td>
         }
         else //Default to name if type cannot be determined by previous checks
         {
@@ -97,6 +112,42 @@
 @code {
     [Parameter]
     public Student_Success_Planner.Data.SuccessObjective successObjective { get; set; }
+
+    [Parameter]
+    public SuccessObjectiveState objectiveState { get; set; }
+
+    /// <summary>
+    /// Indicates a state of completion of the success objective.
+    /// </summary>
+    public enum SuccessObjectiveState
+    {
+        Complete,
+        InProgress,
+        Incomplete
+    }
+
+    /// <summary>
+    /// Name of the icon to be displayed with this objective.
+    /// Determined based on the state of the objective.
+    /// Available icon names found here: https://www.matblazor.com/Icon
+    /// </summary>
+    private string objectiveIcon
+    {
+        get
+        {
+            switch (objectiveState)
+            {
+                case SuccessObjectiveState.Incomplete:
+                    return "check_box_outline_blank";
+                case SuccessObjectiveState.InProgress:
+                    return "indeterminate_check_box";
+                case SuccessObjectiveState.Complete:
+                    return "check_box";
+                default:
+                    return "check_box_outline_blank";
+            }
+        }
+    }
 
     bool dialogIsOpen = false;
 
