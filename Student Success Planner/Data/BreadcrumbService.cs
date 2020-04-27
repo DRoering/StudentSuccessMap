@@ -3,6 +3,7 @@ namespace Student_Success_Planner.Data
 {
     public class BreadcrumbService
     {
+        bool flag = true;
         /// <summary>
         /// The College currently being viewed.
         /// </summary>
@@ -17,6 +18,19 @@ namespace Student_Success_Planner.Data
         /// The Program currently being viewed.
         /// </summary>
         public Program selectedProgram { get; private set; }
+        public delegate void _BreadcrumbEvent();
+        public _BreadcrumbEvent OnAuthorizationSet;
+
+        public void AuthorizeSetter(bool something)
+        {
+            OnAuthorizationSet?.Invoke();
+            flag = something;
+        }
+
+        public bool getFlag()
+        {
+            return flag;
+        }
 
         #region Event Handling
 

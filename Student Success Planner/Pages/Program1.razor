@@ -1,5 +1,5 @@
-﻿@page "/colleges/departments/programs/success-map"
-@layout MainLayoutCustom
+﻿@page "/colleges/departments/programs/success-map-guest"
+@layout MainLayoutDefault
 @using Student_Success_Planner.Data
 @inject BreadcrumbService breadcrumbService
 @inject NavigationManager navigationManager
@@ -29,43 +29,42 @@ else
             <BreadcrumbLink @onclick="breadcrumbService.handleProgramDeselection" To="/colleges/departments/programs">@breadcrumbService.selectedDepartment.getName()</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem IsActive="true">
-            <BreadcrumbLink To="/colleges/departments/programs/success-map">@breadcrumbService.selectedProgram.getName()</BreadcrumbLink>
+            <BreadcrumbLink To="/colleges/departments/programs/success-map-guest">@breadcrumbService.selectedProgram.getName()</BreadcrumbLink>
         </BreadcrumbItem>
     </Breadcrumb>
 
     //Change which success map is being viewed depending on if the user is authenticated.
     <AuthorizeView>
         <Authorized>
-            @*
-        @if (breadcrumbService.getFlag())
-        {
-            <SuccessMap></SuccessMap>
-            showing = true;
-        }
-        else
-        {
-            //Parse StarID from the username
-            string starID = @context.User.Identity.Name.Split('@')[0];
-            <StudentSuccessMap StarID="xh7102oj"></StudentSuccessMap>
-            showing = false;
-        }
-        base.StateHasChanged();
-        @try
-        {
-            //Return to programs page
-            navigationManager.NavigateTo(navigationManager.BaseUri + "colleges/departments/programs/success-map");
-        }
-        catch (Exception e)
-        {
-            Console.Write(e);
-        }*@
+            @*@if (breadcrumbService.getFlag())
+            {
+                <SuccessMap></SuccessMap>
+                showing = true;
+            }
+            else
+            {
+                //Parse StarID from the username
+                string starID = @context.User.Identity.Name.Split('@')[0];
+                <StudentSuccessMap StarID="xh7102oj"></StudentSuccessMap>
+                showing = false;
+            }
+            @*base.StateHasChanged();
+            @try
+            {
+                //Return to programs page
+                navigationManager.NavigateTo(navigationManager.BaseUri + "colleges/departments/programs/success-map");
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+            }
             <!--Would need something like this to handle student vs. admin view-->
-            @*@context.User.IsInRole("student");
-        @context.User.IsInRole("admin");*@
-            <StudentSuccessMap StarID="xh7102oj"></StudentSuccessMap>
+            @context.User.IsInRole("student");
+        @context.User.IsInRole("admin");**@
+            <SuccessMap></SuccessMap>
         </Authorized>
         <NotAuthorized>
-            <StudentSuccessMap StarID="xh7102oj"></StudentSuccessMap>
+            <SuccessMap></SuccessMap>
         </NotAuthorized>
     </AuthorizeView>
 }

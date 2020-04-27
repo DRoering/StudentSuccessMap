@@ -1,0 +1,36 @@
+﻿@using Student_Success_Planner.Data
+@inherits LayoutComponentBase
+@inject BreadcrumbService breadcrumbService
+@*<div class="sidebar">
+        <NavMenu />
+    </div>*@
+
+@inject NavigationManager  navigationManager
+
+<div class="main">
+    <div class="top-row px-4 auth">
+        <Button Clicked="@GoGuest" Color="Color.Success"> View as Guest </Button>
+        <LoginDisplay />
+        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+    </div>
+
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
+
+@code{
+
+    void GoGuest()
+    { 
+        breadcrumbService.AuthorizeSetter(true);
+        try
+        {
+            navigationManager.NavigateTo( "/colleges/departments/programs/success-map-guest");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+}
