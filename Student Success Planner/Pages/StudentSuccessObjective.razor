@@ -38,7 +38,7 @@
                                 <p>Course Weight: @successObjective.Weight</p>
                             </MatDialogContent>
                             <MatDialogActions>
-                                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                                <span class="successObjective" @onclick="(() => { dialogIsOpen = false; })">Close</span>
                             </MatDialogActions>
                         </MatDialog>
                     </td>
@@ -55,7 +55,7 @@
                 <p>Course Weight: @successObjective.Weight</p>
             </MatDialogContent>
             <MatDialogActions>
-                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                <span class="successObjective" @onclick="(() => { dialogIsOpen = false; })">Close</span>
             </MatDialogActions>
         </MatDialog>
     </td>
@@ -72,7 +72,7 @@
                 <p> Course Weight: @successObjective.Weight</p>
             </MatDialogContent>
             <MatDialogActions>
-                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                <span class="successObjective" @onclick="(() => { dialogIsOpen = false; })">Close</span>
             </MatDialogActions>
         </MatDialog>
     </td>
@@ -90,7 +90,7 @@
                                 <p>Course Weight: @successObjective.Weight</p>
                             </MatDialogContent>
                             <MatDialogActions>
-                                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                                <span class="successObjective" @onclick="(() => { dialogIsOpen = false; })">Close</span>
                             </MatDialogActions>
                         </MatDialog>
 
@@ -111,7 +111,7 @@
                 <p>Weight: @successObjective.Weight</p>
             </MatDialogContent>
             <MatDialogActions>
-                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                <span class="successObjective" @onclick="(() => { dialogIsOpen = false; })">Close</span>
             </MatDialogActions>
         </MatDialog>
     </td>
