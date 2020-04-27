@@ -30,7 +30,7 @@
                         <span class="objectiveName">@course.CourseID</span>
                         <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
                         <MatDialog @bind-IsOpen="@dialogIsOpen">
-                            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+                            <MatDialogTitle> @course.Name</MatDialogTitle>
                             <MatDialogContent>
                                 <p>Course Description: @successObjective.Description</p>
                                 <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
@@ -47,7 +47,7 @@
                         <span class="objectiveName">@course.CourseID</span>
                         <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
                         <MatDialog @bind-IsOpen="@dialogIsOpen">
-                            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+                            <MatDialogTitle> @course.Name</MatDialogTitle>
                             <MatDialogContent>
                                 <p>Course Description: @successObjective.Description</p>
                                 <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
@@ -65,14 +65,14 @@
                         <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
 
                         <MatDialog @bind-IsOpen="@dialogIsOpen">
-                            <MatDialogTitle>Course ID: @course.CourseID</MatDialogTitle>
+                            <MatDialogTitle>@course.Name</MatDialogTitle>
                             <MatDialogContent>
                                 <p>Course Description: @successObjective.Description</p>
                                 <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
                                 <p>Course Weight: @successObjective.Weight</p>
                             </MatDialogContent>
                             <MatDialogActions>
-                                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Close</MatButton>
+                                <MatButton OnClick="@(e => { dialogIsOpen = false;  })">Close</MatButton>
                             </MatDialogActions>
                         </MatDialog>
 
@@ -88,7 +88,7 @@
         <span class="objectiveName">@successObjective.Name</span>
         <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
         <MatDialog @bind-IsOpen="@dialogIsOpen">
-            <MatDialogTitle>Course ID: @successObjective.Name</MatDialogTitle>
+            <MatDialogTitle> @successObjective.Name</MatDialogTitle>
             <MatDialogContent>
                 <p>Course Description: @successObjective.Description</p>
                 <p>Eservices Link: <a href="@successObjective.ExternalLink">@successObjective.ExternalLink</a></p>
