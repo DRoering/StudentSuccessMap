@@ -28,7 +28,6 @@
                 case (CourseType.ProgramCore):
                     <td class="course goalArea">
                         <span class="objectiveName">@course.CourseID</span>
-                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
                         <MatDialog @bind-IsOpen="@dialogIsOpen">
                             <MatDialogTitle> @course.Name</MatDialogTitle>
                             <MatDialogContent>
@@ -45,7 +44,6 @@
                 case (CourseType.Elective):
                     <td class="course elective">
                         <span class="objectiveName">@course.CourseID</span>
-                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
                         <MatDialog @bind-IsOpen="@dialogIsOpen">
                             <MatDialogTitle> @course.Name</MatDialogTitle>
                             <MatDialogContent>
@@ -62,8 +60,6 @@
                 default:
                     <td class="course">
                         <span class="objectiveName">@course.CourseID</span>
-                        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
-
                         <MatDialog @bind-IsOpen="@dialogIsOpen">
                             <MatDialogTitle>@course.Name</MatDialogTitle>
                             <MatDialogContent>
@@ -86,7 +82,6 @@
         {
     <td class="successActivity">
         <span class="objectiveName">@successObjective.Name</span>
-        <MatIcon class="objectiveIcon" Icon="@objectiveIcon"></MatIcon>
         <MatDialog @bind-IsOpen="@dialogIsOpen">
             <MatDialogTitle> @successObjective.Name</MatDialogTitle>
             <MatDialogContent>
@@ -112,42 +107,6 @@
 @code {
     [Parameter]
     public Student_Success_Planner.Data.SuccessObjective successObjective { get; set; }
-
-    [Parameter]
-    public SuccessObjectiveState objectiveState { get; set; }
-
-    /// <summary>
-    /// Indicates a state of completion of the success objective.
-    /// </summary>
-    public enum SuccessObjectiveState
-    {
-        Complete,
-        InProgress,
-        Incomplete
-    }
-
-    /// <summary>
-    /// Name of the icon to be displayed with this objective.
-    /// Determined based on the state of the objective.
-    /// Available icon names found here: https://www.matblazor.com/Icon
-    /// </summary>
-    private string objectiveIcon
-    {
-        get
-        {
-            switch (objectiveState)
-            {
-                case SuccessObjectiveState.Incomplete:
-                    return "check_box_outline_blank";
-                case SuccessObjectiveState.InProgress:
-                    return "indeterminate_check_box";
-                case SuccessObjectiveState.Complete:
-                    return "check_box";
-                default:
-                    return "check_box_outline_blank";
-            }
-        }
-    }
 
     bool dialogIsOpen = false;
 
